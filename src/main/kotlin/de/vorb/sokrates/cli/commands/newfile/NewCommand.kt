@@ -212,19 +212,19 @@ class NewCommand @Autowired constructor(
 
         Files.createDirectories(newFilePath?.parent)
 
-        val tpl: Template = fileTemplateConfig.getTemplate("new-post.ftl")
+        val template: Template = fileTemplateConfig.getTemplate("new-item.ftl")
 
         Files.newBufferedWriter(newFilePath, StandardCharsets.UTF_8,
                 StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE).use { newFileOut ->
 
-            val tplModel = HashMap<String, Any>()
-            tplModel.put("common", commonParams)
-            tplModel.put("new", commandParams)
-            tplModel.put("creationDate", creationDate.toString())
+            val templateModel = HashMap<String, Any>()
+            templateModel.put("common", commonParams)
+            templateModel.put("new", commandParams)
+            templateModel.put("creationDate", creationDate.toString())
 
-            tplModel.put("properties", sokratesProperties)
+            templateModel.put("properties", sokratesProperties)
 
-            tpl.process(tplModel, newFileOut)
+            template.process(templateModel, newFileOut)
 
         }
     }
