@@ -34,7 +34,7 @@ class NewCommand @Autowired constructor(
         private val usagePrinter: UsagePrinter,
         override val commonParams: CommonParams,
         private val sokratesProperties: SokratesProperties,
-        private val fileTemplateConfig: FreemarkerConfiguration) : InteractiveCommand {
+        private val fileTemplatesConfig: FreemarkerConfiguration) : InteractiveCommand {
 
     override val name = "new"
 
@@ -212,7 +212,7 @@ class NewCommand @Autowired constructor(
 
         Files.createDirectories(newFilePath?.parent)
 
-        val template: Template = fileTemplateConfig.getTemplate("new-item.ftl")
+        val template: Template = builtInTemplatesConfig.getTemplate("new-item.ftl")
 
         Files.newBufferedWriter(newFilePath, StandardCharsets.UTF_8,
                 StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE).use { newFileOut ->

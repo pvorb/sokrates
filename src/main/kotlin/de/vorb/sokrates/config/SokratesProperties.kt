@@ -12,6 +12,10 @@ class SokratesProperties {
     @NestedConfigurationProperty
     val website: WebsiteProperties = WebsiteProperties()
 
+    var themesDir: String = ""
+
+    var fileTemplatesDir: String = ""
+
     @NestedConfigurationProperty
     val itemTypes: List<ItemTypeProperties> = ArrayList()
 
