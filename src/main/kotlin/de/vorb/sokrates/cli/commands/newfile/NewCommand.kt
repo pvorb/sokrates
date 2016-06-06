@@ -212,7 +212,7 @@ class NewCommand @Autowired constructor(
 
         Files.createDirectories(newFilePath?.parent)
 
-        val template: Template = builtInTemplatesConfig.getTemplate("new-item.ftl")
+        val template: Template = fileTemplatesConfig.getTemplate("new-item.ftl")
 
         Files.newBufferedWriter(newFilePath, StandardCharsets.UTF_8,
                 StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE).use { newFileOut ->
