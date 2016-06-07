@@ -1,4 +1,4 @@
-package de.vorb.sokrates.cli.commands.newfile
+package de.vorb.sokrates.cli.commands.newitem
 
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.Parameters
@@ -30,7 +30,7 @@ import javax.ws.rs.core.UriBuilder
 import freemarker.template.Configuration as FreemarkerConfiguration
 
 @Component
-class NewCommand @Autowired constructor(
+class NewItemCommand @Autowired constructor(
         private val usagePrinter: UsagePrinter,
         override val commonParams: CommonParams,
         private val sokratesProperties: SokratesProperties,

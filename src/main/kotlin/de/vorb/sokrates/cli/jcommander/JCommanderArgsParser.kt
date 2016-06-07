@@ -11,7 +11,6 @@ import de.vorb.sokrates.cli.commands.InteractiveCommand
 import de.vorb.sokrates.cli.exceptions.UnknownCommandException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import java.io.PrintWriter
 
 @Component
 class JCommanderArgsParser @Autowired constructor(
