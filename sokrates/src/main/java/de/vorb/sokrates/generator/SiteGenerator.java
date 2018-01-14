@@ -1,5 +1,6 @@
 package de.vorb.sokrates.generator;
 
+import de.vorb.sokrates.cli.GenerateCommand;
 import de.vorb.sokrates.generator.pandoc.PandocRunner;
 import de.vorb.sokrates.model.PageMetaData;
 import de.vorb.sokrates.model.SourceFileMatch;
@@ -10,6 +11,9 @@ import de.vorb.sokrates.properties.SokratesProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -33,9 +37,11 @@ import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 
 @Slf4j
 @Component
+@ConditionalOnBean(name = "generateCommand")
 @RequiredArgsConstructor
-public class SiteGenerator {
+public class SiteGenerator implements ApplicationRunner {
 
+    private final GenerateCommand generateCommand;
     private final DSLContext dslContext;
     private final SokratesProperties sokratesProperties;
     private final SourceFileFinder sourceFileFinder;
@@ -43,7 +49,13 @@ public class SiteGenerator {
     private final PandocRunner pandocRunner;
     private final PebbleFileRenderer pebbleFileRenderer;
 
-    public void generateSite() {
+    @Override
+    public void run(ApplicationArguments args) {
+        log.info("Generate command: {}", generateCommand);
+        generateSite();
+    }
+
+    private void generateSite() {
         ensureOutputDirectoryExists();
 
         sourceFileFinder
@@ -109,5 +121,5 @@ public class SiteGenerator {
             return Paths.get(fileNameWithoutExtension + '.' + extensionMapping.get(fileExtension));
         }
     }
-
 }
+

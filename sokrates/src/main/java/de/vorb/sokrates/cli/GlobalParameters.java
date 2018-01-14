@@ -9,7 +9,7 @@ import picocli.CommandLine.Option;
         commandListHeading = "Available commands:%n",
         subcommands = {GenerateCommand.class}
 )
-public class TopLevelCommand {
+public class GlobalParameters {
 
     @Option(names = {"-h", "--help"}, usageHelp = true, description = "Show this help message")
     private boolean showHelpInfo;

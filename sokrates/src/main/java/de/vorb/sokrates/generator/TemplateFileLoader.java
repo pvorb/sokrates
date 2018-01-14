@@ -23,9 +23,9 @@ public class TemplateFileLoader implements Loader<String> {
     private Charset charset = StandardCharsets.UTF_8;
 
     @Setter
-    private String prefix;
+    private String prefix = "";
     @Setter
-    private String suffix;
+    private String suffix = "";
 
     @Override
     public Reader getReader(String cacheKey) throws LoaderException {

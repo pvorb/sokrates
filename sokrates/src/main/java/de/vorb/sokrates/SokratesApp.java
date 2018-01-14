@@ -1,6 +1,6 @@
 package de.vorb.sokrates;
 
-import de.vorb.sokrates.cli.TopLevelCommand;
+import de.vorb.sokrates.cli.GlobalParameters;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +13,7 @@ import picocli.CommandLine;
 public class SokratesApp {
 
     public static void main(String[] args) {
-        final CommandLine cmd = new CommandLine(new TopLevelCommand());
+        final CommandLine cmd = new CommandLine(new GlobalParameters());
         cmd.parseWithHandler(new CommandLine.RunLast(), System.out, args);
     }
 

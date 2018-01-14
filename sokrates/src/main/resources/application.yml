@@ -8,7 +8,7 @@ spring.datasource:
 sokrates:
   directory:
     output: out/
-    template: src/site/resources/templates/
+    templates: src/site/resources/templates/
   site:
     default-locale: en-US
   parser:
