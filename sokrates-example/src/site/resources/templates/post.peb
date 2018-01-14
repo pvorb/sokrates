@@ -1,0 +1,14 @@
+{% extends 'base.peb' %}
+
+{% block title %}
+    {{ title | plain }}
+{% endblock %}
+
+{% block content %}
+    <h1>{{ title | raw }}</h1>
+    <p>{{ createdAt }}</p>
+
+    <div id="content">
+        {{ content | raw }}
+    </div>
+{% endblock %}

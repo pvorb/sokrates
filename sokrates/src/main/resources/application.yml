@@ -1,0 +1,34 @@
+spring.datasource:
+  type: com.zaxxer.hikari.HikariDataSource
+  url: jdbc:h2:./sokrates
+  driver-class-name: org.h2.Driver
+  username: sa
+  password:
+
+sokrates:
+  directory:
+    output: out/
+    template: src/site/resources/templates/
+  site:
+    default-locale: en-US
+  parser:
+    source-file-matchers:
+      - pattern: src/site/markdown/**/*.md
+        base-directory: src/site/markdown
+        format: markdown
+  generator:
+    pandoc-executable: E:\Program Files\Pandoc\pandoc.exe
+    extension-mapping:
+      md: html
+  indexes:
+    - name: Blog index
+      template: index.html
+      output-file: index.html
+      order-by:
+        - created_at DESC
+    - name: Feed
+      template: feed.xml
+      output-file: feed.xml
+      order-by:
+        - created_at DESC
+      limit: 10

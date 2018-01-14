@@ -1,0 +1,66 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>de.vorb</groupId>
+        <artifactId>sokrates-parent</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>sokrates-example</artifactId>
+    <packaging>pom</packaging>
+
+    <description>Example website using Maven and Sokrates</description>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <executions>
+                    <execution>
+                        <id>generate-site</id>
+                        <phase>site</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>de.vorb.sokrates.SokratesApp</mainClass>
+                            <arguments>
+                                <argument>generate</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>preview-site</id>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>de.vorb.sokrates.SokratesApp</mainClass>
+                            <arguments>
+                                <argument>preview</argument>
+                            </arguments>
+                            <daemonThreadJoinTimeout>-1</daemonThreadJoinTimeout>
+                        </configuration>
+                    </execution>
+                </executions>
+
+                <configuration>
+                    <includePluginDependencies>true</includePluginDependencies>
+                    <includeProjectDependencies>false</includeProjectDependencies>
+                </configuration>
+
+                <dependencies>
+                    <dependency>
+                        <groupId>de.vorb</groupId>
+                        <artifactId>sokrates</artifactId>
+                        <version>0.1.0-SNAPSHOT</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+</project>
