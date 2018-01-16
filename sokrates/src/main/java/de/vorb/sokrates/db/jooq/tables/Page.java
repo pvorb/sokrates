@@ -40,7 +40,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Page extends TableImpl<PageRecord> {
 
-    private static final long serialVersionUID = 72553475;
+    private static final long serialVersionUID = -831665480;
 
     /**
      * The reference instance of <code>PUBLIC.PAGE</code>
@@ -127,7 +127,7 @@ public class Page extends TableImpl<PageRecord> {
      */
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.IDX_PAGE_CREATED_AT, Indexes.IDX_PAGE_LAST_MODIFIED_AT, Indexes.PRIMARY_KEY_2, Indexes.UNIQUE_IDX_PAGE_PATH);
+        return Arrays.<Index>asList(Indexes.CONSTRAINT_INDEX_2, Indexes.IDX_PAGE_CREATED_AT, Indexes.IDX_PAGE_LAST_MODIFIED_AT, Indexes.PRIMARY_KEY_2);
     }
 
     /**
@@ -151,7 +151,7 @@ public class Page extends TableImpl<PageRecord> {
      */
     @Override
     public List<UniqueKey<PageRecord>> getKeys() {
-        return Arrays.<UniqueKey<PageRecord>>asList(Keys.CONSTRAINT_2);
+        return Arrays.<UniqueKey<PageRecord>>asList(Keys.CONSTRAINT_2, Keys.CONSTRAINT_25);
     }
 
     /**

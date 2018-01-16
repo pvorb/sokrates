@@ -21,6 +21,7 @@ import org.jooq.Name;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
+import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
 
@@ -38,7 +39,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class PageTag extends TableImpl<PageTagRecord> {
 
-    private static final long serialVersionUID = 1872169450;
+    private static final long serialVersionUID = -258940434;
 
     /**
      * The reference instance of <code>PUBLIC.PAGE_TAG</code>
@@ -105,7 +106,23 @@ public class PageTag extends TableImpl<PageTagRecord> {
      */
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.CONSTRAINT_INDEX_6, Indexes.CONSTRAINT_INDEX_61, Indexes.IDX_PAGE_TAG);
+        return Arrays.<Index>asList(Indexes.CONSTRAINT_INDEX_6, Indexes.PRIMARY_KEY_61);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public UniqueKey<PageTagRecord> getPrimaryKey() {
+        return Keys.CONSTRAINT_6;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<UniqueKey<PageTagRecord>> getKeys() {
+        return Arrays.<UniqueKey<PageTagRecord>>asList(Keys.CONSTRAINT_6);
     }
 
     /**
@@ -113,7 +130,7 @@ public class PageTag extends TableImpl<PageTagRecord> {
      */
     @Override
     public List<ForeignKey<PageTagRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<PageTagRecord, ?>>asList(Keys.CONSTRAINT_6, Keys.CONSTRAINT_61);
+        return Arrays.<ForeignKey<PageTagRecord, ?>>asList(Keys.CONSTRAINT_61, Keys.CONSTRAINT_61F);
     }
 
     /**

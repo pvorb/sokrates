@@ -4,7 +4,6 @@
 package de.vorb.sokrates.db.jooq;
 
 
-import de.vorb.sokrates.db.jooq.tables.FlywaySchemaHistory;
 import de.vorb.sokrates.db.jooq.tables.Page;
 import de.vorb.sokrates.db.jooq.tables.PageTag;
 import de.vorb.sokrates.db.jooq.tables.Tag;
@@ -33,7 +32,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = 819204179;
+    private static final long serialVersionUID = 474125761;
 
     /**
      * The reference instance of <code>PUBLIC</code>
@@ -54,11 +53,6 @@ public class Public extends SchemaImpl {
      * The table <code>PUBLIC.TAG</code>.
      */
     public final Tag TAG = de.vorb.sokrates.db.jooq.tables.Tag.TAG;
-
-    /**
-     * The table <code>PUBLIC.flyway_schema_history</code>.
-     */
-    public final FlywaySchemaHistory FLYWAY_SCHEMA_HISTORY = de.vorb.sokrates.db.jooq.tables.FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY;
 
     /**
      * No further instances allowed
@@ -87,7 +81,6 @@ public class Public extends SchemaImpl {
         return Arrays.<Table<?>>asList(
             Page.PAGE,
             PageTag.PAGE_TAG,
-            Tag.TAG,
-            FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY);
+            Tag.TAG);
     }
 }

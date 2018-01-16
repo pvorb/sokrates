@@ -4,11 +4,9 @@
 package de.vorb.sokrates.db.jooq;
 
 
-import de.vorb.sokrates.db.jooq.tables.FlywaySchemaHistory;
 import de.vorb.sokrates.db.jooq.tables.Page;
 import de.vorb.sokrates.db.jooq.tables.PageTag;
 import de.vorb.sokrates.db.jooq.tables.Tag;
-import de.vorb.sokrates.db.jooq.tables.records.FlywaySchemaHistoryRecord;
 import de.vorb.sokrates.db.jooq.tables.records.PageRecord;
 import de.vorb.sokrates.db.jooq.tables.records.PageTagRecord;
 import de.vorb.sokrates.db.jooq.tables.records.TagRecord;
@@ -47,16 +45,17 @@ public class Keys {
     // -------------------------------------------------------------------------
 
     public static final UniqueKey<PageRecord> CONSTRAINT_2 = UniqueKeys0.CONSTRAINT_2;
+    public static final UniqueKey<PageRecord> CONSTRAINT_25 = UniqueKeys0.CONSTRAINT_25;
+    public static final UniqueKey<PageTagRecord> CONSTRAINT_6 = UniqueKeys0.CONSTRAINT_6;
     public static final UniqueKey<TagRecord> CONSTRAINT_1 = UniqueKeys0.CONSTRAINT_1;
     public static final UniqueKey<TagRecord> CONSTRAINT_14 = UniqueKeys0.CONSTRAINT_14;
-    public static final UniqueKey<FlywaySchemaHistoryRecord> FLYWAY_SCHEMA_HISTORY_PK = UniqueKeys0.FLYWAY_SCHEMA_HISTORY_PK;
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions
     // -------------------------------------------------------------------------
 
-    public static final ForeignKey<PageTagRecord, PageRecord> CONSTRAINT_6 = ForeignKeys0.CONSTRAINT_6;
-    public static final ForeignKey<PageTagRecord, TagRecord> CONSTRAINT_61 = ForeignKeys0.CONSTRAINT_61;
+    public static final ForeignKey<PageTagRecord, PageRecord> CONSTRAINT_61 = ForeignKeys0.CONSTRAINT_61;
+    public static final ForeignKey<PageTagRecord, TagRecord> CONSTRAINT_61F = ForeignKeys0.CONSTRAINT_61F;
 
     // -------------------------------------------------------------------------
     // [#1459] distribute members to avoid static initialisers > 64kb
@@ -69,13 +68,14 @@ public class Keys {
 
     private static class UniqueKeys0 extends AbstractKeys {
         public static final UniqueKey<PageRecord> CONSTRAINT_2 = createUniqueKey(Page.PAGE, "CONSTRAINT_2", Page.PAGE.ID);
+        public static final UniqueKey<PageRecord> CONSTRAINT_25 = createUniqueKey(Page.PAGE, "CONSTRAINT_25", Page.PAGE.PATH);
+        public static final UniqueKey<PageTagRecord> CONSTRAINT_6 = createUniqueKey(PageTag.PAGE_TAG, "CONSTRAINT_6", PageTag.PAGE_TAG.TAG_ID, PageTag.PAGE_TAG.PAGE_ID);
         public static final UniqueKey<TagRecord> CONSTRAINT_1 = createUniqueKey(Tag.TAG, "CONSTRAINT_1", Tag.TAG.ID);
         public static final UniqueKey<TagRecord> CONSTRAINT_14 = createUniqueKey(Tag.TAG, "CONSTRAINT_14", Tag.TAG.NAME);
-        public static final UniqueKey<FlywaySchemaHistoryRecord> FLYWAY_SCHEMA_HISTORY_PK = createUniqueKey(FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY, "flyway_schema_history_pk", FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY.INSTALLED_RANK);
     }
 
     private static class ForeignKeys0 extends AbstractKeys {
-        public static final ForeignKey<PageTagRecord, PageRecord> CONSTRAINT_6 = createForeignKey(de.vorb.sokrates.db.jooq.Keys.CONSTRAINT_2, PageTag.PAGE_TAG, "CONSTRAINT_6", PageTag.PAGE_TAG.PAGE_ID);
-        public static final ForeignKey<PageTagRecord, TagRecord> CONSTRAINT_61 = createForeignKey(de.vorb.sokrates.db.jooq.Keys.CONSTRAINT_1, PageTag.PAGE_TAG, "CONSTRAINT_61", PageTag.PAGE_TAG.TAG_ID);
+        public static final ForeignKey<PageTagRecord, PageRecord> CONSTRAINT_61 = createForeignKey(de.vorb.sokrates.db.jooq.Keys.CONSTRAINT_2, PageTag.PAGE_TAG, "CONSTRAINT_61", PageTag.PAGE_TAG.PAGE_ID);
+        public static final ForeignKey<PageTagRecord, TagRecord> CONSTRAINT_61F = createForeignKey(de.vorb.sokrates.db.jooq.Keys.CONSTRAINT_1, PageTag.PAGE_TAG, "CONSTRAINT_61F", PageTag.PAGE_TAG.TAG_ID);
     }
 }

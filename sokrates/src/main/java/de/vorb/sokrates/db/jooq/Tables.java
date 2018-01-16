@@ -4,7 +4,6 @@
 package de.vorb.sokrates.db.jooq;
 
 
-import de.vorb.sokrates.db.jooq.tables.FlywaySchemaHistory;
 import de.vorb.sokrates.db.jooq.tables.Page;
 import de.vorb.sokrates.db.jooq.tables.PageTag;
 import de.vorb.sokrates.db.jooq.tables.Tag;
@@ -39,9 +38,4 @@ public class Tables {
      * The table <code>PUBLIC.TAG</code>.
      */
     public static final Tag TAG = de.vorb.sokrates.db.jooq.tables.Tag.TAG;
-
-    /**
-     * The table <code>PUBLIC.flyway_schema_history</code>.
-     */
-    public static final FlywaySchemaHistory FLYWAY_SCHEMA_HISTORY = de.vorb.sokrates.db.jooq.tables.FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY;
 }

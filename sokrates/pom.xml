@@ -246,13 +246,18 @@
                     </jdbc>
                     <generator>
                         <database>
-                            <includes>.*</includes>
                             <inputSchema>PUBLIC</inputSchema>
+                            <includes>.*</includes>
+                            <excludes>PUBLIC\.flyway_schema_history</excludes>
                         </database>
                         <target>
                             <packageName>de.vorb.sokrates.db.jooq</packageName>
                             <directory>${project.build.sourceDirectory}</directory>
                         </target>
+                        <generate>
+                            <records>true</records>
+                            <pojos>true</pojos>
+                        </generate>
                     </generator>
                 </configuration>
             </plugin>
