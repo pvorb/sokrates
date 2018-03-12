@@ -20,7 +20,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = NONE)
-public class PagePageMetaDataParserTest {
+public class PageMetaDataParserTest {
 
     private static final ClassPathResource SAMPLE_FILE = new ClassPathResource("/sample-with-front-matter.md");
 
@@ -39,7 +39,7 @@ public class PagePageMetaDataParserTest {
             assertThat(pageMetaData.getLastModifiedAt())
                     .isEqualTo(LocalDate.parse("2018-01-05"));
             assertThat(pageMetaData.getTemplate())
-                    .isEqualTo("sokrates.default.html");
+                    .isEqualTo("sokrates.default.peb");
             assertThat(pageMetaData.getTags())
                     .containsExactlyInAnyOrder("test", "sample");
         }
