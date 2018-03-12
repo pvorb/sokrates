@@ -1,6 +1,7 @@
 package de.vorb.sokrates.parser;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +18,8 @@ public class ParserConfiguration {
     @Bean
     public ObjectMapper yamlObjectMapper() {
         return new ObjectMapper(new YAMLFactory())
-                .registerModule(new JavaTimeModule());
+                .registerModule(new JavaTimeModule())
+                .setPropertyNamingStrategy(PropertyNamingStrategy.KEBAB_CASE);
     }
 
     @Bean
