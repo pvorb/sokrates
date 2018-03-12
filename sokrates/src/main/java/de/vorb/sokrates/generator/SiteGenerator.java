@@ -76,14 +76,26 @@ public class SiteGenerator implements ApplicationRunner {
 
         final Path sourceFile = sourceFileMatch.getFile();
 
+        final Path outputFileName = mapFileExtension(sourceFile.getFileName());
+        final Path relativePath = sourceFileMatch.getBaseDirectory().relativize(sourceFile);
+        final Path outputDirectory = sokratesProperties.getDirectory().getOutput()
+                .resolve(relativePath)
+                .getParent();
+
+        try {
+            Files.createDirectories(outputDirectory);
+        } catch (IOException e) {
+            log.error("Could not create output directory {}", outputDirectory);
+            return;
+        }
+
+        final Path outputFile = outputDirectory.resolve(outputFileName);
+
         try (final Reader reader = openReader(sourceFile)) {
 
             final PageMetaData pageMetaData = pageMetaDataParser.parseMetaDataFrom(reader);
             final Locale locale = getDocumentLocale(pageMetaData);
             final String htmlContent = pandocRunner.convertFile(sourceFile, locale, sourceFileMatch.getFormat(), HTML5);
-
-            final Path outputFileName = mapFileExtension(sourceFile.getFileName());
-            final Path outputFile = sokratesProperties.getDirectory().getOutput().resolve(outputFileName);
 
             try (final Writer writer = openWriter(outputFile)) {
                 pebbleFileRenderer.renderFile(writer, pageMetaData, htmlContent);
@@ -92,7 +104,7 @@ public class SiteGenerator implements ApplicationRunner {
                 log.error("Could not write file {}", outputFile);
             }
         } catch (IOException e) {
-            log.error("Could not read file", e);
+            log.error("Could not read file {}", sourceFile);
         }
     }
 
