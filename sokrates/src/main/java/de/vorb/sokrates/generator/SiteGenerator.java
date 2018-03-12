@@ -56,15 +56,15 @@ public class SiteGenerator implements ApplicationRunner {
     }
 
     private void generateSite() {
-        ensureOutputDirectoryExists();
+        final Path outputDirectory = sokratesProperties.getDirectory().getOutput();
+        ensureOutputDirectoryExists(outputDirectory);
 
         sourceFileFinder
                 .findSourceFileMatches()
                 .forEach(this::processSourceFile);
     }
 
-    private void ensureOutputDirectoryExists() {
-        final Path outputDirectory = sokratesProperties.getDirectory().getOutput();
+    private void ensureOutputDirectoryExists(Path outputDirectory) {
         try {
             Files.createDirectories(outputDirectory);
         } catch (IOException e) {
@@ -76,24 +76,23 @@ public class SiteGenerator implements ApplicationRunner {
 
         final Path sourceFile = sourceFileMatch.getFile();
 
-        final Path outputFileName = mapFileExtension(sourceFile.getFileName());
-        final Path relativePath = sourceFileMatch.getBaseDirectory().relativize(sourceFile);
-        final Path outputDirectory = sokratesProperties.getDirectory().getOutput()
-                .resolve(relativePath)
-                .getParent();
-
-        try {
-            Files.createDirectories(outputDirectory);
-        } catch (IOException e) {
-            log.error("Could not create output directory {}", outputDirectory);
-            return;
-        }
-
-        final Path outputFile = outputDirectory.resolve(outputFileName);
-
         try (final Reader reader = openReader(sourceFile)) {
 
+            final Path relativePath = sourceFileMatch.getBaseDirectory().relativize(sourceFile);
+            final Path outputDirectory = sokratesProperties.getDirectory().getOutput()
+                    .resolve(relativePath)
+                    .getParent();
+
+            ensureOutputDirectoryExists(outputDirectory);
+
             final PageMetaData pageMetaData = pageMetaDataParser.parseMetaDataFrom(reader);
+
+            final Path sourceFileName = Optional.ofNullable(pageMetaData.getAlias())
+                    .map(Paths::get)
+                    .orElse(sourceFile.getFileName());
+            final Path outputFileName = mapFileExtension(sourceFileName);
+            final Path outputFile = outputDirectory.resolve(outputFileName);
+
             final Locale locale = getDocumentLocale(pageMetaData);
             final String htmlContent = pandocRunner.convertFile(sourceFile, locale, sourceFileMatch.getFormat(), HTML5);
 

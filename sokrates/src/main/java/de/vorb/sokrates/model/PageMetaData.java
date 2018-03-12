@@ -15,6 +15,8 @@ public class PageMetaData {
 
     private String title;
 
+    private String alias;
+
     private LocalDate createdAt;
     private LocalDate lastModifiedAt;
 
