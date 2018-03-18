@@ -1,10 +1,11 @@
 package de.vorb.sokrates.parser;
 
+import de.vorb.sokrates.generator.SourceFileFinder;
 import de.vorb.sokrates.generator.pandoc.PandocSourceFileFormat;
 import de.vorb.sokrates.model.SourceFileMatch;
-import de.vorb.sokrates.properties.ParserProperties;
+import de.vorb.sokrates.properties.GenerateRuleProperties;
+import de.vorb.sokrates.properties.GeneratorProperties;
 import de.vorb.sokrates.properties.SokratesProperties;
-import de.vorb.sokrates.properties.SourceFileMatcherProperties;
 
 import com.google.common.jimfs.Jimfs;
 import org.junit.Before;
@@ -37,17 +38,17 @@ public class SourceFileFinderTest {
         Files.createFile(sourceFile2);
         Files.createFile(otherFile);
 
-        sokratesProperties.setParser(new ParserProperties());
-        final SourceFileMatcherProperties sourceFileMatcherProperties = new SourceFileMatcherProperties();
-        sourceFileMatcherProperties.setPattern("./src/*.md");
-        sourceFileMatcherProperties.setBaseDirectory(baseDir);
-        sourceFileMatcherProperties.setFormat(PandocSourceFileFormat.MARKDOWN);
+        sokratesProperties.setGenerator(new GeneratorProperties());
+        final GenerateRuleProperties generateRuleProperties = new GenerateRuleProperties();
+        generateRuleProperties.setPattern("./src/*.md");
+        generateRuleProperties.setBaseDirectory(baseDir);
+        generateRuleProperties.setFormat(PandocSourceFileFormat.MARKDOWN);
 
-        sokratesProperties.getParser().setSourceFileMatchers(Collections.singletonList(sourceFileMatcherProperties));
+        sokratesProperties.getGenerator().setGenerateRules(Collections.singletonList(generateRuleProperties));
     }
 
     @Test
-    public void findsMatchingFiles() throws Exception {
+    public void findsMatchingFiles() {
         assertThat(sourceFileFinder.findSourceFileMatches())
                 .containsExactlyInAnyOrder(
                         new SourceFileMatch(sourceFile1, baseDir, PandocSourceFileFormat.MARKDOWN),

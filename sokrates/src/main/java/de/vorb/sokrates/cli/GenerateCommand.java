@@ -11,6 +11,8 @@ import picocli.CommandLine.ParentCommand;
 @Data
 public class GenerateCommand implements InjectableCommand {
 
+    public static final String NAME = "generateCommand";
+
     @Option(names = {"-w", "--watch"}, description = "Automatically re-runs site generation on file system changes")
     private boolean watch;
 
@@ -22,7 +24,7 @@ public class GenerateCommand implements InjectableCommand {
 
     @Override
     public String getBeanName() {
-        return "generateCommand";
+        return NAME;
     }
 
 }

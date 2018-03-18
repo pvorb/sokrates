@@ -1,4 +1,4 @@
-package de.vorb.sokrates.parser;
+package de.vorb.sokrates.generator;
 
 import de.vorb.sokrates.model.PageMetaData;
 

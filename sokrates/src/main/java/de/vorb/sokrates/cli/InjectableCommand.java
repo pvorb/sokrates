@@ -1,6 +1,6 @@
 package de.vorb.sokrates.cli;
 
-import de.vorb.sokrates.SokratesApp;
+import de.vorb.sokrates.app.SokratesApp;
 
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -26,8 +26,7 @@ public interface InjectableCommand extends Runnable {
         final GenericApplicationContext parentContext = new GenericApplicationContext(parentBeanFactory);
         parentContext.refresh();
 
-        final ConfigurableApplicationContext applicationContext = new SpringApplicationBuilder(
-                SokratesApp.class)
+        final ConfigurableApplicationContext applicationContext = new SpringApplicationBuilder(SokratesApp.class)
                 .parent(parentContext)
                 .web(isWebApplication())
                 .build()

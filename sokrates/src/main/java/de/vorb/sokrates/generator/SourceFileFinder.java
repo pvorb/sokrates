@@ -1,9 +1,9 @@
-package de.vorb.sokrates.parser;
+package de.vorb.sokrates.generator;
 
 import de.vorb.sokrates.generator.pandoc.PandocSourceFileFormat;
 import de.vorb.sokrates.model.SourceFileMatch;
 import de.vorb.sokrates.properties.SokratesProperties;
-import de.vorb.sokrates.properties.SourceFileMatcherProperties;
+import de.vorb.sokrates.properties.GenerateRuleProperties;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,11 +29,11 @@ public class SourceFileFinder {
     private final SokratesProperties sokratesProperties;
 
     public Stream<SourceFileMatch> findSourceFileMatches() {
-        return sokratesProperties.getParser().getSourceFileMatchers().stream()
+        return sokratesProperties.getGenerator().getGenerateRules().stream()
                 .flatMap(this::findSourceFileMatches);
     }
 
-    private Stream<SourceFileMatch> findSourceFileMatches(SourceFileMatcherProperties sourceFileMatcher) {
+    private Stream<SourceFileMatch> findSourceFileMatches(GenerateRuleProperties sourceFileMatcher) {
         try {
             final String pattern = sourceFileMatcher.getPattern();
             final Path baseDirectory = sourceFileMatcher.getBaseDirectory();

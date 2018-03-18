@@ -1,4 +1,6 @@
-package de.vorb.sokrates.checksum;
+package de.vorb.sokrates.generator;
+
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -10,19 +12,9 @@ import java.security.NoSuchAlgorithmException;
 
 import static java.nio.file.Files.newByteChannel;
 
-public class Sha1ChecksumCalculator implements ChecksumCalculator {
+@Component
+public class Sha1ChecksumCalculator {
 
-    private static final MessageDigest SHA_1;
-
-    static {
-        try {
-            SHA_1 = MessageDigest.getInstance("SHA-1");
-        } catch (NoSuchAlgorithmException e) {
-            throw new AssertionError("JVM does not support SHA-1");
-        }
-    }
-
-    @Override
     public byte[] calculateChecksum(Path file) {
         final MessageDigest sha1Hash = createSha1Hash();
         final ByteBuffer buffer = ByteBuffer.allocateDirect(8 * 1024);

@@ -2,7 +2,7 @@ spring.datasource:
   url: jdbc:h2:./sokrates
   driver-class-name: org.h2.Driver
   username: sa
-  password: sokrates
+  password:
 
 sokrates:
   site:
@@ -10,15 +10,17 @@ sokrates:
   directory:
     output: out/
     templates: src/site/resources/templates/
-  parser:
-    source-file-matchers:
-      - pattern: src/site/markdown/**/*.md
-        base-directory: src/site/markdown
-        format: markdown
   generator:
     pandoc-executable: E:\Program Files\Pandoc\pandoc.exe
     extension-mapping:
       md: html
+    generate-rules:
+      - pattern: src/site/markdown/**/*.md
+        base-directory: src/site/markdown
+        format: markdown
+    copy-rules:
+      - pattern: src/site/markdown/**/*
+        base-directory: src/site/markdown
   indexes:
     - name: Blog index
       template: index.html

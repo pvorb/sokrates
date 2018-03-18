@@ -27,7 +27,7 @@
                             <goal>java</goal>
                         </goals>
                         <configuration>
-                            <mainClass>de.vorb.sokrates.SokratesApp</mainClass>
+                            <mainClass>de.vorb.sokrates.app.SokratesApp</mainClass>
                             <arguments>
                                 <argument>generate</argument>
                                 <argument>--force</argument>

@@ -1,5 +1,6 @@
 package de.vorb.sokrates.parser;
 
+import de.vorb.sokrates.generator.PageMetaDataParser;
 import de.vorb.sokrates.model.PageMetaData;
 
 import org.junit.Test;
