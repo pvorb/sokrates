@@ -39,7 +39,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Tag extends TableImpl<TagRecord> {
 
-    private static final long serialVersionUID = 615398103;
+    private static final long serialVersionUID = 446836163;
 
     /**
      * The reference instance of <code>PUBLIC.TAG</code>
@@ -106,7 +106,7 @@ public class Tag extends TableImpl<TagRecord> {
      */
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.CONSTRAINT_INDEX_1, Indexes.IDX_TAG_NAME, Indexes.PRIMARY_KEY_1);
+        return Arrays.<Index>asList(Indexes.CONSTRAINT_INDEX_1, Indexes.PRIMARY_KEY_1);
     }
 
     /**

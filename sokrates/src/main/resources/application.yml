@@ -2,14 +2,14 @@ spring.datasource:
   url: jdbc:h2:./sokrates
   driver-class-name: org.h2.Driver
   username: sa
-  password: ""
+  password: sokrates
 
 sokrates:
+  site:
+    default-locale: en-US
   directory:
     output: out/
     templates: src/site/resources/templates/
-  site:
-    default-locale: en-US
   parser:
     source-file-matchers:
       - pattern: src/site/markdown/**/*.md

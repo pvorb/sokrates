@@ -9,8 +9,8 @@ import java.nio.file.Path;
 @Data
 public class SourceFileMatch {
 
-    private final Path file;
-    private final Path baseDirectory;
+    private final Path filePath;
+    private final Path baseDirectoryPath;
     private final PandocSourceFileFormat format;
 
 }

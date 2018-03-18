@@ -30,6 +30,7 @@
                             <mainClass>de.vorb.sokrates.SokratesApp</mainClass>
                             <arguments>
                                 <argument>generate</argument>
+                                <argument>--force</argument>
                             </arguments>
                         </configuration>
                     </execution>

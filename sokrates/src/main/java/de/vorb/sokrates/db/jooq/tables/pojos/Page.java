@@ -5,7 +5,9 @@ package de.vorb.sokrates.db.jooq.tables.pojos;
 
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.nio.file.Path;
+import java.time.LocalDate;
+import java.util.Locale;
 
 import javax.annotation.Generated;
 
@@ -23,39 +25,51 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Page implements Serializable {
 
-    private static final long serialVersionUID = 844651528;
+    private static final long serialVersionUID = -1380288766;
 
     private Long      id;
-    private String    path;
+    private Path      sourceFilePath;
+    private String    sourceFileFormat;
+    private Path      outputFilePath;
     private String    title;
-    private Timestamp createdAt;
-    private Timestamp lastModifiedAt;
+    private LocalDate createdAt;
+    private LocalDate lastModifiedAt;
+    private Locale    locale;
     private byte[]    checksum;
 
     public Page() {}
 
     public Page(Page value) {
         this.id = value.id;
-        this.path = value.path;
+        this.sourceFilePath = value.sourceFilePath;
+        this.sourceFileFormat = value.sourceFileFormat;
+        this.outputFilePath = value.outputFilePath;
         this.title = value.title;
         this.createdAt = value.createdAt;
         this.lastModifiedAt = value.lastModifiedAt;
+        this.locale = value.locale;
         this.checksum = value.checksum;
     }
 
     public Page(
         Long      id,
-        String    path,
+        Path      sourceFilePath,
+        String    sourceFileFormat,
+        Path      outputFilePath,
         String    title,
-        Timestamp createdAt,
-        Timestamp lastModifiedAt,
+        LocalDate createdAt,
+        LocalDate lastModifiedAt,
+        Locale    locale,
         byte[]    checksum
     ) {
         this.id = id;
-        this.path = path;
+        this.sourceFilePath = sourceFilePath;
+        this.sourceFileFormat = sourceFileFormat;
+        this.outputFilePath = outputFilePath;
         this.title = title;
         this.createdAt = createdAt;
         this.lastModifiedAt = lastModifiedAt;
+        this.locale = locale;
         this.checksum = checksum;
     }
 
@@ -63,48 +77,81 @@ public class Page implements Serializable {
         return this.id;
     }
 
-    public void setId(Long id) {
+    public Page setId(Long id) {
         this.id = id;
+        return this;
     }
 
-    public String getPath() {
-        return this.path;
+    public Path getSourceFilePath() {
+        return this.sourceFilePath;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public Page setSourceFilePath(Path sourceFilePath) {
+        this.sourceFilePath = sourceFilePath;
+        return this;
+    }
+
+    public String getSourceFileFormat() {
+        return this.sourceFileFormat;
+    }
+
+    public Page setSourceFileFormat(String sourceFileFormat) {
+        this.sourceFileFormat = sourceFileFormat;
+        return this;
+    }
+
+    public Path getOutputFilePath() {
+        return this.outputFilePath;
+    }
+
+    public Page setOutputFilePath(Path outputFilePath) {
+        this.outputFilePath = outputFilePath;
+        return this;
     }
 
     public String getTitle() {
         return this.title;
     }
 
-    public void setTitle(String title) {
+    public Page setTitle(String title) {
         this.title = title;
+        return this;
     }
 
-    public Timestamp getCreatedAt() {
+    public LocalDate getCreatedAt() {
         return this.createdAt;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
+    public Page setCreatedAt(LocalDate createdAt) {
         this.createdAt = createdAt;
+        return this;
     }
 
-    public Timestamp getLastModifiedAt() {
+    public LocalDate getLastModifiedAt() {
         return this.lastModifiedAt;
     }
 
-    public void setLastModifiedAt(Timestamp lastModifiedAt) {
+    public Page setLastModifiedAt(LocalDate lastModifiedAt) {
         this.lastModifiedAt = lastModifiedAt;
+        return this;
+    }
+
+    public Locale getLocale() {
+        return this.locale;
+    }
+
+    public Page setLocale(Locale locale) {
+        this.locale = locale;
+        return this;
     }
 
     public byte[] getChecksum() {
         return this.checksum;
     }
 
-    public void setChecksum(byte... checksum) {
+    public Page setChecksum(byte... checksum) {
         this.checksum = checksum;
+        return this;
     }
 
     @Override
@@ -112,10 +159,13 @@ public class Page implements Serializable {
         StringBuilder sb = new StringBuilder("Page (");
 
         sb.append(id);
-        sb.append(", ").append(path);
+        sb.append(", ").append(sourceFilePath);
+        sb.append(", ").append(sourceFileFormat);
+        sb.append(", ").append(outputFilePath);
         sb.append(", ").append(title);
         sb.append(", ").append(createdAt);
         sb.append(", ").append(lastModifiedAt);
+        sb.append(", ").append(locale);
         sb.append(", ").append("[binary...]");
 
         sb.append(")");

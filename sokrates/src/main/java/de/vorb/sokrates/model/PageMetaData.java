@@ -1,16 +1,19 @@
 package de.vorb.sokrates.model;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 @Data
+@Builder
 public class PageMetaData {
 
     private String title;
@@ -22,7 +25,7 @@ public class PageMetaData {
 
     private String template;
     private Locale locale;
-    private List<String> tags;
+    private Set<String> tags;
 
     private Properties properties;
 
@@ -38,7 +41,7 @@ public class PageMetaData {
             map.put("lastModifiedAt", lastModifiedAt);
         }
         if (tags != null) {
-            map.put("tags", Collections.unmodifiableList(tags));
+            map.put("tags", Collections.unmodifiableSet(tags));
         }
         return map;
     }

@@ -1,5 +1,6 @@
 package de.vorb.sokrates.cli;
 
+import lombok.Data;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
@@ -9,6 +10,7 @@ import picocli.CommandLine.Option;
         commandListHeading = "Available commands:%n",
         subcommands = {GenerateCommand.class}
 )
+@Data
 public class GlobalParameters {
 
     @Option(names = {"-h", "--help"}, usageHelp = true, description = "Show this help message")

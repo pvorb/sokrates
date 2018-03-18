@@ -4,14 +4,18 @@
 package de.vorb.sokrates.db.jooq.tables;
 
 
+import de.vorb.sokrates.db.converters.LocaleConverter;
+import de.vorb.sokrates.db.converters.PathConverter;
 import de.vorb.sokrates.db.jooq.Indexes;
 import de.vorb.sokrates.db.jooq.Keys;
 import de.vorb.sokrates.db.jooq.Public;
 import de.vorb.sokrates.db.jooq.tables.records.PageRecord;
 
-import java.sql.Timestamp;
+import java.nio.file.Path;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.Generated;
 
@@ -40,7 +44,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Page extends TableImpl<PageRecord> {
 
-    private static final long serialVersionUID = -831665480;
+    private static final long serialVersionUID = 2086526137;
 
     /**
      * The reference instance of <code>PUBLIC.PAGE</code>
@@ -61,9 +65,19 @@ public class Page extends TableImpl<PageRecord> {
     public final TableField<PageRecord, Long> ID = createField("ID", org.jooq.impl.SQLDataType.BIGINT.nullable(false).identity(true), this, "");
 
     /**
-     * The column <code>PUBLIC.PAGE.PATH</code>.
+     * The column <code>PUBLIC.PAGE.SOURCE_FILE_PATH</code>.
      */
-    public final TableField<PageRecord, String> PATH = createField("PATH", org.jooq.impl.SQLDataType.VARCHAR(2147483647).nullable(false), this, "");
+    public final TableField<PageRecord, Path> SOURCE_FILE_PATH = createField("SOURCE_FILE_PATH", org.jooq.impl.SQLDataType.VARCHAR(2147483647).nullable(false), this, "", new PathConverter());
+
+    /**
+     * The column <code>PUBLIC.PAGE.SOURCE_FILE_FORMAT</code>.
+     */
+    public final TableField<PageRecord, String> SOURCE_FILE_FORMAT = createField("SOURCE_FILE_FORMAT", org.jooq.impl.SQLDataType.VARCHAR(64).nullable(false), this, "");
+
+    /**
+     * The column <code>PUBLIC.PAGE.OUTPUT_FILE_PATH</code>.
+     */
+    public final TableField<PageRecord, Path> OUTPUT_FILE_PATH = createField("OUTPUT_FILE_PATH", org.jooq.impl.SQLDataType.VARCHAR(2147483647).nullable(false), this, "", new PathConverter());
 
     /**
      * The column <code>PUBLIC.PAGE.TITLE</code>.
@@ -73,12 +87,17 @@ public class Page extends TableImpl<PageRecord> {
     /**
      * The column <code>PUBLIC.PAGE.CREATED_AT</code>.
      */
-    public final TableField<PageRecord, Timestamp> CREATED_AT = createField("CREATED_AT", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false), this, "");
+    public final TableField<PageRecord, LocalDate> CREATED_AT = createField("CREATED_AT", org.jooq.impl.SQLDataType.LOCALDATE.nullable(false), this, "");
 
     /**
      * The column <code>PUBLIC.PAGE.LAST_MODIFIED_AT</code>.
      */
-    public final TableField<PageRecord, Timestamp> LAST_MODIFIED_AT = createField("LAST_MODIFIED_AT", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false), this, "");
+    public final TableField<PageRecord, LocalDate> LAST_MODIFIED_AT = createField("LAST_MODIFIED_AT", org.jooq.impl.SQLDataType.LOCALDATE.nullable(false), this, "");
+
+    /**
+     * The column <code>PUBLIC.PAGE.LOCALE</code>.
+     */
+    public final TableField<PageRecord, Locale> LOCALE = createField("LOCALE", org.jooq.impl.SQLDataType.VARCHAR(16).nullable(false), this, "", new LocaleConverter());
 
     /**
      * The column <code>PUBLIC.PAGE.CHECKSUM</code>.
@@ -127,7 +146,7 @@ public class Page extends TableImpl<PageRecord> {
      */
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.CONSTRAINT_INDEX_2, Indexes.IDX_PAGE_CREATED_AT, Indexes.IDX_PAGE_LAST_MODIFIED_AT, Indexes.PRIMARY_KEY_2);
+        return Arrays.<Index>asList(Indexes.CONSTRAINT_INDEX_2, Indexes.CONSTRAINT_INDEX_25, Indexes.IDX__PAGE__CREATED_AT, Indexes.IDX__PAGE__LAST_MODIFIED_AT, Indexes.PRIMARY_KEY_2);
     }
 
     /**
@@ -151,7 +170,7 @@ public class Page extends TableImpl<PageRecord> {
      */
     @Override
     public List<UniqueKey<PageRecord>> getKeys() {
-        return Arrays.<UniqueKey<PageRecord>>asList(Keys.CONSTRAINT_2, Keys.CONSTRAINT_25);
+        return Arrays.<UniqueKey<PageRecord>>asList(Keys.CONSTRAINT_2, Keys.CONSTRAINT_25, Keys.CONSTRAINT_255);
     }
 
     /**

@@ -28,13 +28,14 @@ import org.jooq.impl.UpdatableRecordImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class TagRecord extends UpdatableRecordImpl<TagRecord> implements Record2<Long, String> {
 
-    private static final long serialVersionUID = -1368270183;
+    private static final long serialVersionUID = 70156129;
 
     /**
      * Setter for <code>PUBLIC.TAG.ID</code>.
      */
-    public void setId(Long value) {
+    public TagRecord setId(Long value) {
         set(0, value);
+        return this;
     }
 
     /**
@@ -47,8 +48,9 @@ public class TagRecord extends UpdatableRecordImpl<TagRecord> implements Record2
     /**
      * Setter for <code>PUBLIC.TAG.NAME</code>.
      */
-    public void setName(String value) {
+    public TagRecord setName(String value) {
         set(1, value);
+        return this;
     }
 
     /**

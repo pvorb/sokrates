@@ -22,7 +22,7 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Tag implements Serializable {
 
-    private static final long serialVersionUID = -855033182;
+    private static final long serialVersionUID = 1998882124;
 
     private Long   id;
     private String name;
@@ -46,16 +46,18 @@ public class Tag implements Serializable {
         return this.id;
     }
 
-    public void setId(Long id) {
+    public Tag setId(Long id) {
         this.id = id;
+        return this;
     }
 
     public String getName() {
         return this.name;
     }
 
-    public void setName(String name) {
+    public Tag setName(String name) {
         this.name = name;
+        return this;
     }
 
     @Override

@@ -27,13 +27,14 @@ import org.jooq.impl.UpdatableRecordImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class PageTagRecord extends UpdatableRecordImpl<PageTagRecord> implements Record2<Long, Long> {
 
-    private static final long serialVersionUID = -602081122;
+    private static final long serialVersionUID = 1575103630;
 
     /**
      * Setter for <code>PUBLIC.PAGE_TAG.PAGE_ID</code>.
      */
-    public void setPageId(Long value) {
+    public PageTagRecord setPageId(Long value) {
         set(0, value);
+        return this;
     }
 
     /**
@@ -46,8 +47,9 @@ public class PageTagRecord extends UpdatableRecordImpl<PageTagRecord> implements
     /**
      * Setter for <code>PUBLIC.PAGE_TAG.TAG_ID</code>.
      */
-    public void setTagId(Long value) {
+    public PageTagRecord setTagId(Long value) {
         set(1, value);
+        return this;
     }
 
     /**

@@ -22,7 +22,7 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class PageTag implements Serializable {
 
-    private static final long serialVersionUID = 115729371;
+    private static final long serialVersionUID = 1483484875;
 
     private Long pageId;
     private Long tagId;
@@ -46,16 +46,18 @@ public class PageTag implements Serializable {
         return this.pageId;
     }
 
-    public void setPageId(Long pageId) {
+    public PageTag setPageId(Long pageId) {
         this.pageId = pageId;
+        return this;
     }
 
     public Long getTagId() {
         return this.tagId;
     }
 
-    public void setTagId(Long tagId) {
+    public PageTag setTagId(Long tagId) {
         this.tagId = tagId;
+        return this;
     }
 
     @Override
