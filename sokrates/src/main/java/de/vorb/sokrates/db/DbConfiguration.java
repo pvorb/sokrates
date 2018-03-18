@@ -6,9 +6,11 @@ import de.vorb.sokrates.db.jooq.tables.daos.TagDao;
 
 import org.jooq.DSLContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@ComponentScan
 public class DbConfiguration {
 
     private final org.jooq.Configuration configuration;

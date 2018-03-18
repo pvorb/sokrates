@@ -2,11 +2,10 @@ package de.vorb.sokrates.generator;
 
 import de.vorb.sokrates.cli.GenerateCommand;
 import de.vorb.sokrates.db.jooq.tables.daos.PageDao;
-import de.vorb.sokrates.db.jooq.tables.daos.PageTagDao;
 import de.vorb.sokrates.db.jooq.tables.daos.TagDao;
 import de.vorb.sokrates.db.jooq.tables.pojos.Page;
-import de.vorb.sokrates.db.jooq.tables.pojos.PageTag;
 import de.vorb.sokrates.db.jooq.tables.pojos.Tag;
+import de.vorb.sokrates.db.repositories.PageTagRepository;
 import de.vorb.sokrates.generator.pandoc.PandocRunner;
 import de.vorb.sokrates.generator.pandoc.PandocSourceFileFormat;
 import de.vorb.sokrates.model.PageMetaData;
@@ -16,6 +15,7 @@ import de.vorb.sokrates.properties.SokratesProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nullable;
 import java.io.BufferedReader;
@@ -48,7 +48,7 @@ public class PageWriter {
 
     private final GenerateCommand generateCommand;
     private final PageDao pageDao;
-    private final PageTagDao pageTagDao;
+    private final PageTagRepository pageTagRepository;
     private final TagDao tagDao;
     private final SokratesProperties sokratesProperties;
     private final SourceFileFinder sourceFileFinder;
@@ -57,6 +57,7 @@ public class PageWriter {
     private final PandocRunner pandocRunner;
     private final PebbleFileRenderer pebbleFileRenderer;
 
+    @Transactional
     public void writePages() {
         final List<SourceFileMatch> sourceFileMatches =
                 sourceFileFinder.findSourceFileMatches().collect(Collectors.toList());
@@ -225,16 +226,11 @@ public class PageWriter {
         }
     }
 
-    private void linkPageToTags(Page page, Set<String> tagNames) {
+    private void linkPageToTags(Page page, Set<String> tags) {
 
         final Long pageId = pageDao.fetchOneByOutputFilePath(page.getOutputFilePath()).getId();
-        final List<Tag> tags = tagDao.fetchByName(tagNames.toArray(new String[0]));
 
-        final List<PageTag> pageTags = tags.stream()
-                .map(tag -> new PageTag(pageId, tag.getId()))
-                .collect(Collectors.toList());
-
-        pageTagDao.insert(pageTags);
+        pageTagRepository.savePageTags(pageId, tags);
     }
 
 }
