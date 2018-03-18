@@ -1,11 +1,10 @@
 package de.vorb.sokrates.generator;
 
 import de.vorb.sokrates.cli.GenerateCommand;
-import de.vorb.sokrates.db.jooq.tables.daos.PageDao;
-import de.vorb.sokrates.db.jooq.tables.daos.TagDao;
 import de.vorb.sokrates.db.jooq.tables.pojos.Page;
-import de.vorb.sokrates.db.jooq.tables.pojos.Tag;
+import de.vorb.sokrates.db.repositories.PageRepository;
 import de.vorb.sokrates.db.repositories.PageTagRepository;
+import de.vorb.sokrates.db.repositories.TagRepository;
 import de.vorb.sokrates.generator.pandoc.PandocRunner;
 import de.vorb.sokrates.generator.pandoc.PandocSourceFileFormat;
 import de.vorb.sokrates.model.PageMetaData;
@@ -47,9 +46,9 @@ import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 public class PageWriter {
 
     private final GenerateCommand generateCommand;
-    private final PageDao pageDao;
+    private final PageRepository pageRepository;
     private final PageTagRepository pageTagRepository;
-    private final TagDao tagDao;
+    private final TagRepository tagRepository;
     private final SokratesProperties sokratesProperties;
     private final SourceFileFinder sourceFileFinder;
     private final PageMetaDataParser pageMetaDataParser;
@@ -67,7 +66,7 @@ public class PageWriter {
 
             final Path sourceFilePath = sourceFileMatch.getFilePath();
             final byte[] checksum = sha1ChecksumCalculator.calculateChecksum(sourceFilePath);
-            final Page existingPage = pageDao.fetchOneBySourceFilePath(sourceFilePath);
+            final Page existingPage = pageRepository.fetchOneBySourceFilePath(sourceFilePath);
 
             if (!generateCommand.isForce() && isPageNewOrChanged(checksum, existingPage)) {
                 log.debug("Skipping file {} because it did not change");
@@ -102,19 +101,8 @@ public class PageWriter {
     }
 
     private void createMissingTags(Set<String> tags) {
-        final String[] tagNames = tags.toArray(new String[0]);
-        final Set<String> existingTagNames = tagDao.fetchByName(tagNames).stream()
-                .map(Tag::getName)
-                .collect(Collectors.toSet());
-
-        final List<Tag> missingTags = tags.stream()
-                .filter(tagName -> !existingTagNames.contains(tagName))
-                .map(tag -> new Tag().setName(tag))
-                .collect(Collectors.toList());
-
-        tagDao.insert(missingTags);
-
-        log.info("Created {} missing tags", missingTags.size());
+        final int numberOfCreatedTags = tagRepository.saveTags(tags);
+        log.info("Created {} missing tags", numberOfCreatedTags);
     }
 
     private Path determineOutputFilePath(SourceFileMatch sourceFileMatch, PageMetaData pageMetaData) {
@@ -219,16 +207,16 @@ public class PageWriter {
 
     private void storePage(Page page, Page existingPage) {
         if (existingPage == null) {
-            pageDao.insert(page);
+            pageRepository.insert(page);
         } else {
             page.setId(existingPage.getId());
-            pageDao.update(page);
+            pageRepository.update(page);
         }
     }
 
     private void linkPageToTags(Page page, Set<String> tags) {
 
-        final Long pageId = pageDao.fetchOneByOutputFilePath(page.getOutputFilePath()).getId();
+        final Long pageId = pageRepository.fetchOneBySourceFilePath(page.getSourceFilePath()).getId();
 
         pageTagRepository.savePageTags(pageId, tags);
     }

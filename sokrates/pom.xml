@@ -251,7 +251,6 @@
                         <generate>
                             <records>true</records>
                             <pojos>true</pojos>
-                            <daos>true</daos>
                             <javaTimeTypes>true</javaTimeTypes>
                             <fluentSetters>true</fluentSetters>
                         </generate>
