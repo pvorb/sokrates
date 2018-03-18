@@ -2,8 +2,7 @@ package de.vorb.sokrates.generator;
 
 import de.vorb.sokrates.generator.pandoc.PandocSourceFileFormat;
 import de.vorb.sokrates.model.SourceFileMatch;
-import de.vorb.sokrates.properties.SokratesProperties;
-import de.vorb.sokrates.properties.GenerateRuleProperties;
+import de.vorb.sokrates.properties.SourceFileRuleProperties;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +12,7 @@ import org.springframework.util.AntPathMatcher;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.stream.Stream;
 
 import static java.nio.file.FileVisitOption.FOLLOW_LINKS;
@@ -26,18 +26,16 @@ public class SourceFileFinder {
 
     private final AntPathMatcher antPathMatcher = new AntPathMatcher();
 
-    private final SokratesProperties sokratesProperties;
-
-    public Stream<SourceFileMatch> findSourceFileMatches() {
-        return sokratesProperties.getGenerator().getGenerateRules().stream()
+    public Stream<SourceFileMatch> findSourceFileMatches(Collection<SourceFileRuleProperties> sourceFileRules) {
+        return sourceFileRules.stream()
                 .flatMap(this::findSourceFileMatches);
     }
 
-    private Stream<SourceFileMatch> findSourceFileMatches(GenerateRuleProperties sourceFileMatcher) {
+    private Stream<SourceFileMatch> findSourceFileMatches(SourceFileRuleProperties sourceFileRule) {
         try {
-            final String pattern = sourceFileMatcher.getPattern();
-            final Path baseDirectory = sourceFileMatcher.getBaseDirectory();
-            final PandocSourceFileFormat format = sourceFileMatcher.getFormat();
+            final String pattern = sourceFileRule.getPattern();
+            final Path baseDirectory = sourceFileRule.getBaseDirectory();
+            final PandocSourceFileFormat format = sourceFileRule.getFormat();
 
             final Stream<Path> sourceFileCandidates =
                     Files.walk(baseDirectory, MAX_DEPTH, FOLLOW_LINKS);
@@ -46,7 +44,7 @@ public class SourceFileFinder {
                     .filter(candidateFile -> pathMatchesPattern(candidateFile, pattern))
                     .map(sourceFile -> new SourceFileMatch(sourceFile, baseDirectory, format));
         } catch (IOException e) {
-            log.error("Exception using {}", sourceFileMatcher, e);
+            log.error("Exception using {}", sourceFileRule, e);
             return Stream.empty();
         }
     }

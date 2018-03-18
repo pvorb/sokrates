@@ -13,7 +13,7 @@ public class GeneratorProperties {
 
     private Path pandocExecutable;
     private Map<String, String> extensionMapping = new HashMap<>();
-    private List<GenerateRuleProperties> generateRules = new ArrayList<>();
-    private List<CopyRuleProperties> copyRules = new ArrayList<>();
+    private List<SourceFileRuleProperties> generateRules = new ArrayList<>();
+    private List<SourceFileRuleProperties> copyRules = new ArrayList<>();
 
 }

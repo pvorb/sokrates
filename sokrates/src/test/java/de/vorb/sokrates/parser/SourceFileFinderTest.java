@@ -3,9 +3,9 @@ package de.vorb.sokrates.parser;
 import de.vorb.sokrates.generator.SourceFileFinder;
 import de.vorb.sokrates.generator.pandoc.PandocSourceFileFormat;
 import de.vorb.sokrates.model.SourceFileMatch;
-import de.vorb.sokrates.properties.GenerateRuleProperties;
 import de.vorb.sokrates.properties.GeneratorProperties;
 import de.vorb.sokrates.properties.SokratesProperties;
+import de.vorb.sokrates.properties.SourceFileRuleProperties;
 
 import com.google.common.jimfs.Jimfs;
 import org.junit.Before;
@@ -23,7 +23,7 @@ public class SourceFileFinderTest {
     private final FileSystem fs = Jimfs.newFileSystem();
     private final SokratesProperties sokratesProperties = new SokratesProperties();
 
-    private final SourceFileFinder sourceFileFinder = new SourceFileFinder(sokratesProperties);
+    private final SourceFileFinder sourceFileFinder = new SourceFileFinder();
 
     private final Path baseDir = fs.getPath("./src/");
     private final Path sourceFile1 = fs.getPath("./src/1.md");
@@ -39,17 +39,17 @@ public class SourceFileFinderTest {
         Files.createFile(otherFile);
 
         sokratesProperties.setGenerator(new GeneratorProperties());
-        final GenerateRuleProperties generateRuleProperties = new GenerateRuleProperties();
-        generateRuleProperties.setPattern("./src/*.md");
-        generateRuleProperties.setBaseDirectory(baseDir);
-        generateRuleProperties.setFormat(PandocSourceFileFormat.MARKDOWN);
+        final SourceFileRuleProperties sourceFileRuleProperties = new SourceFileRuleProperties();
+        sourceFileRuleProperties.setPattern("./src/*.md");
+        sourceFileRuleProperties.setBaseDirectory(baseDir);
+        sourceFileRuleProperties.setFormat(PandocSourceFileFormat.MARKDOWN);
 
-        sokratesProperties.getGenerator().setGenerateRules(Collections.singletonList(generateRuleProperties));
+        sokratesProperties.getGenerator().setGenerateRules(Collections.singletonList(sourceFileRuleProperties));
     }
 
     @Test
     public void findsMatchingFiles() {
-        assertThat(sourceFileFinder.findSourceFileMatches())
+        assertThat(sourceFileFinder.findSourceFileMatches(sokratesProperties.getGenerator().getGenerateRules()))
                 .containsExactlyInAnyOrder(
                         new SourceFileMatch(sourceFile1, baseDir, PandocSourceFileFormat.MARKDOWN),
                         new SourceFileMatch(sourceFile2, baseDir, PandocSourceFileFormat.MARKDOWN)

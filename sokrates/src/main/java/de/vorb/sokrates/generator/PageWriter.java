@@ -10,6 +10,7 @@ import de.vorb.sokrates.generator.pandoc.PandocSourceFileFormat;
 import de.vorb.sokrates.model.PageMetaData;
 import de.vorb.sokrates.model.SourceFileMatch;
 import de.vorb.sokrates.properties.SokratesProperties;
+import de.vorb.sokrates.properties.SourceFileRuleProperties;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -58,8 +59,9 @@ public class PageWriter {
 
     @Transactional
     public void writePages() {
+        final List<SourceFileRuleProperties> generateRules = sokratesProperties.getGenerator().getGenerateRules();
         final List<SourceFileMatch> sourceFileMatches =
-                sourceFileFinder.findSourceFileMatches().collect(Collectors.toList());
+                sourceFileFinder.findSourceFileMatches(generateRules).collect(Collectors.toList());
 
         int numberOfWrittenPages = 0;
         for (final SourceFileMatch sourceFileMatch : sourceFileMatches) {

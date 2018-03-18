@@ -25,6 +25,13 @@ public class PageRepository {
                 .fetchOneInto(Page.class);
     }
 
+    public boolean containsPageWithSourceFilePath(Path sourceFilePath) {
+        return dslContext.selectOne()
+                .from(PAGE)
+                .where(PAGE.SOURCE_FILE_PATH.eq(sourceFilePath))
+                .execute() != 0;
+    }
+
     public void insert(Page page) {
         dslContext.executeInsert(dslContext.newRecord(PAGE, page));
     }
