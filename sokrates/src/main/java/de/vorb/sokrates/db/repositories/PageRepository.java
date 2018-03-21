@@ -1,14 +1,18 @@
 package de.vorb.sokrates.db.repositories;
 
 import de.vorb.sokrates.db.jooq.tables.pojos.Page;
+import de.vorb.sokrates.db.jooq.tables.records.PageRecord;
 
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
+import org.jooq.OrderField;
+import org.jooq.SelectSeekStepN;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.file.Path;
+import java.util.List;
 
 import static de.vorb.sokrates.db.jooq.Tables.PAGE;
 
@@ -30,6 +34,16 @@ public class PageRepository {
                 .from(PAGE)
                 .where(PAGE.SOURCE_FILE_PATH.eq(sourceFilePath))
                 .execute() != 0;
+    }
+
+    public List<Page> fetchWithOrderBy(List<OrderField<?>> orderFields, Long limit) {
+        final SelectSeekStepN<PageRecord> select = dslContext.selectFrom(PAGE)
+                .orderBy(orderFields);
+        if (limit != null) {
+            return select.limit(limit.intValue()).fetchInto(Page.class);
+        } else {
+            return select.fetchInto(Page.class);
+        }
     }
 
     public void insert(Page page) {

@@ -55,7 +55,7 @@ public class PageWriter {
     private final PageMetaDataParser pageMetaDataParser;
     private final Sha1ChecksumCalculator sha1ChecksumCalculator;
     private final PandocRunner pandocRunner;
-    private final PebbleFileRenderer pebbleFileRenderer;
+    private final PebbleRenderer pebbleRenderer;
 
     @Transactional
     public void writePages() {
@@ -190,7 +190,7 @@ public class PageWriter {
 
         final Path outputFilePath = page.getOutputFilePath();
         try (final Writer writer = openWriter(outputFilePath)) {
-            pebbleFileRenderer.renderFile(writer, pageMetaData, htmlContent);
+            pebbleRenderer.renderPage(writer, pageMetaData, htmlContent);
             log.info("Rendered file {} to {}", page.getSourceFilePath(), outputFilePath);
         } catch (IOException e) {
             log.error("Could not write file {}", outputFilePath);

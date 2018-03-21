@@ -23,13 +23,15 @@ sokrates:
         base-directory: src/site/markdown
   indexes:
     - name: Blog index
-      template: index.html
+      template: index.peb
       output-file: index.html
       order-by:
         - created_at DESC
+      grouping: BY_YEAR_CREATED
     - name: Feed
-      template: feed.xml
+      template: index.peb
       output-file: feed.xml
       order-by:
         - created_at DESC
       limit: 10
+      grouping: NONE

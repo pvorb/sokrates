@@ -1,0 +1,16 @@
+{% extends 'base.peb' %}
+
+{% block title %}
+    {{ name }}
+{% endblock %}
+
+{% block content %}
+    {% for entry in groupedPages %}
+        <h2>{{ entry.key }}</h2>
+        <ul>
+        {% for page in entry.value %}
+            <li>{{ page.createdAt }} &ndash; {{ page.title | raw }}</li>
+        {% endfor %}
+        </ul>
+    {% endfor %}
+{% endblock %}
