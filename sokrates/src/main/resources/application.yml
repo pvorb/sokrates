@@ -6,6 +6,8 @@ spring.datasource:
 
 sokrates:
   site:
+    title: My personal blog
+    subtitle: A blog about personal things
     default-locale: en-US
   directory:
     output: out/
@@ -23,15 +25,16 @@ sokrates:
         base-directory: src/site/markdown
   indexes:
     - name: Blog index
+      title: Blog index
       template: index.peb
       output-file: index.html
       order-by:
         - created_at DESC
       grouping: BY_YEAR_CREATED
     - name: Feed
-      template: index.peb
+      title: Atom Feed
+      template: feed.peb
       output-file: feed.xml
       order-by:
         - created_at DESC
       limit: 10
-      grouping: NONE

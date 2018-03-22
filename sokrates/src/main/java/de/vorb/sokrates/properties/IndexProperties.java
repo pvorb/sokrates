@@ -13,15 +13,17 @@ import java.util.Properties;
 public class IndexProperties {
 
     private String name;
+    private String title;
+
     private String template;
     private Path outputFile;
 
     private List<String> orderBy = new ArrayList<>();
     private String where;
-    private Long limit;
+    private Integer limit;
 
     private Grouping grouping = Grouping.NONE;
 
-    private Properties properties;
+    private Properties properties = new Properties();
 
 }

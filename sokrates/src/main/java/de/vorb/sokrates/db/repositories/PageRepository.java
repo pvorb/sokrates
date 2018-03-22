@@ -5,8 +5,8 @@ import de.vorb.sokrates.db.jooq.tables.records.PageRecord;
 
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
-import org.jooq.OrderField;
 import org.jooq.SelectSeekStepN;
+import org.jooq.SortField;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,11 +36,10 @@ public class PageRepository {
                 .execute() != 0;
     }
 
-    public List<Page> fetchWithOrderBy(List<OrderField<?>> orderFields, Long limit) {
-        final SelectSeekStepN<PageRecord> select = dslContext.selectFrom(PAGE)
-                .orderBy(orderFields);
+    public List<Page> fetchWithOrderBy(List<SortField<?>> sortFields, Integer limit) {
+        final SelectSeekStepN<PageRecord> select = dslContext.selectFrom(PAGE).orderBy(sortFields);
         if (limit != null) {
-            return select.limit(limit.intValue()).fetchInto(Page.class);
+            return select.limit(limit).fetchInto(Page.class);
         } else {
             return select.fetchInto(Page.class);
         }

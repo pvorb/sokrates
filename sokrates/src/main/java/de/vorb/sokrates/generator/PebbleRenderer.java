@@ -3,6 +3,7 @@ package de.vorb.sokrates.generator;
 import de.vorb.sokrates.db.jooq.tables.pojos.Page;
 import de.vorb.sokrates.model.PageMetaData;
 import de.vorb.sokrates.properties.IndexProperties;
+import de.vorb.sokrates.properties.SokratesProperties;
 
 import com.mitchellbosecke.pebble.PebbleEngine;
 import com.mitchellbosecke.pebble.error.PebbleException;
@@ -23,6 +24,7 @@ import java.util.Map;
 public class PebbleRenderer {
 
     private final PebbleEngine pebbleEngine;
+    private final SokratesProperties sokratesProperties;
 
     public void renderPage(Writer writer, PageMetaData pageMetaData, String content) {
         final String templateName = pageMetaData.getTemplate();
@@ -49,9 +51,10 @@ public class PebbleRenderer {
         try {
             final PebbleTemplate pebbleTemplate = pebbleEngine.getTemplate(templateName);
             final Map<String, Object> context = new HashMap<>();
-            context.put("name", index.getName());
+            context.put("index", index);
             context.put("pages", pages);
             context.put("groupedPages", groupedIndexPages);
+            context.put("site", sokratesProperties.getSite());
             pebbleTemplate.evaluate(writer, context);
         } catch (PebbleException e) {
             throw new RuntimeException("Unable to render file", e);

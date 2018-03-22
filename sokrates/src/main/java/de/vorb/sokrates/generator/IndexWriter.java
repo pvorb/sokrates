@@ -8,6 +8,7 @@ import de.vorb.sokrates.properties.SokratesProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.OrderField;
+import org.jooq.SortField;
 import org.jooq.SortOrder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,28 +41,50 @@ public class IndexWriter {
 
         for (final IndexProperties index : indexes) {
 
-            final List<OrderField<?>> orderFields = new ArrayList<>();
+            final List<SortField<?>> sortFields = determineOrder(index);
 
-            for (final String orderBy : index.getOrderBy()) {
-                final String[] parts = orderBy.split(" ");
-                final String fieldName = parts[0].toUpperCase();
-                final SortOrder sortOrder = SortOrder.valueOf(parts[1]);
-                orderFields.add(PAGE.field(fieldName).sort(sortOrder));
-            }
-            orderFields.add(PAGE.ID.desc());
-
-            final List<Page> indexPages = pageRepository.fetchWithOrderBy(orderFields, index.getLimit());
+            final List<Page> indexPages = pageRepository.fetchWithOrderBy(sortFields, index.getLimit());
             final Map<Object, List<Page>> groupedIndexPages = index.getGrouping().groupPages(indexPages.stream());
 
-            try (final BufferedWriter writer = Files.newBufferedWriter(index.getOutputFile(), UTF_8, CREATE,
-                    TRUNCATE_EXISTING)) {
+            try (final BufferedWriter writer = openBufferedWriter(index)) {
                 pebbleRenderer.renderIndexFile(writer, index, indexPages, groupedIndexPages);
                 log.info("Rendered index \"{}\" to {}", index.getName(), index.getOutputFile());
             } catch (IOException e) {
-                log.error("Help!", e);
+                log.error("Could not write index file", e);
             }
         }
+    }
 
+    private static BufferedWriter openBufferedWriter(IndexProperties index) throws IOException {
+        return Files.newBufferedWriter(index.getOutputFile(), UTF_8, CREATE, TRUNCATE_EXISTING);
+    }
+
+    private List<SortField<?>> determineOrder(IndexProperties index) {
+
+        final List<SortField<?>> orderFields = new ArrayList<>();
+
+        for (final String orderBy : index.getOrderBy()) {
+            orderFields.add(parseOrderBy(orderBy));
+        }
+
+        ensureDeterministicOrder(orderFields);
+
+        return orderFields;
+    }
+
+    private static SortField<?> parseOrderBy(String orderBy) {
+        final String[] parts = orderBy.split(" ");
+        final String fieldName = parts[0].toUpperCase();
+        final SortOrder sortOrder = SortOrder.valueOf(parts[1]);
+        return PAGE.field(fieldName).sort(sortOrder);
+    }
+
+    private static void ensureDeterministicOrder(List<SortField<?>> orderFields) {
+        if (!orderFields.isEmpty()) {
+            orderFields.add(PAGE.ID.sort(orderFields.get(0).getOrder()));
+        } else {
+            orderFields.add(PAGE.ID.desc());
+        }
     }
 
 }
