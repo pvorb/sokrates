@@ -1,4 +1,4 @@
-package de.vorb.sokrates.generator;
+package de.vorb.sokrates.generator.pebble;
 
 import de.vorb.sokrates.db.jooq.tables.pojos.Page;
 import de.vorb.sokrates.model.PageMetaData;

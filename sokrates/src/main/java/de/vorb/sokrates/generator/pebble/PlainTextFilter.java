@@ -1,4 +1,4 @@
-package de.vorb.sokrates.generator;
+package de.vorb.sokrates.generator.pebble;
 
 import com.mitchellbosecke.pebble.extension.Filter;
 import org.owasp.html.HtmlPolicyBuilder;

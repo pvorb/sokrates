@@ -2,12 +2,12 @@ package de.vorb.sokrates.generator;
 
 import de.vorb.sokrates.db.jooq.tables.pojos.Page;
 import de.vorb.sokrates.db.repositories.PageRepository;
+import de.vorb.sokrates.generator.pebble.PebbleRenderer;
 import de.vorb.sokrates.properties.IndexProperties;
 import de.vorb.sokrates.properties.SokratesProperties;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jooq.OrderField;
 import org.jooq.SortField;
 import org.jooq.SortOrder;
 import org.springframework.stereotype.Component;
@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -46,17 +47,36 @@ public class IndexWriter {
             final List<Page> indexPages = pageRepository.fetchWithOrderBy(sortFields, index.getLimit());
             final Map<Object, List<Page>> groupedIndexPages = index.getGrouping().groupPages(indexPages.stream());
 
-            try (final BufferedWriter writer = openBufferedWriter(index)) {
-                pebbleRenderer.renderIndexFile(writer, index, indexPages, groupedIndexPages);
-                log.info("Rendered index \"{}\" to {}", index.getName(), index.getOutputFile());
-            } catch (IOException e) {
-                log.error("Could not write index file", e);
-            }
+            writeIndexFile(index, indexPages, groupedIndexPages);
         }
     }
 
-    private static BufferedWriter openBufferedWriter(IndexProperties index) throws IOException {
-        return Files.newBufferedWriter(index.getOutputFile(), UTF_8, CREATE, TRUNCATE_EXISTING);
+    private void writeIndexFile(IndexProperties index, List<Page> indexPages,
+            Map<Object, List<Page>> groupedIndexPages) {
+
+        final Path outputFilePath = sokratesProperties.getDirectory().getOutput()
+                .resolve(index.getOutputFile());
+
+        ensureOutputDirectoryExists(outputFilePath.getParent());
+
+        try (final BufferedWriter writer = openBufferedWriter(outputFilePath)) {
+            pebbleRenderer.renderIndexFile(writer, index, indexPages, groupedIndexPages);
+            log.info("Rendered index \"{}\" to {}", index.getName(), outputFilePath);
+        } catch (IOException e) {
+            log.error("Could not write index file", e);
+        }
+    }
+
+    private void ensureOutputDirectoryExists(Path outputDirectory) {
+        try {
+            Files.createDirectories(outputDirectory);
+        } catch (IOException e) {
+            log.error("Unable to create output directory: {}", outputDirectory);
+        }
+    }
+
+    private static BufferedWriter openBufferedWriter(Path filePath) throws IOException {
+        return Files.newBufferedWriter(filePath, UTF_8, CREATE, TRUNCATE_EXISTING);
     }
 
     private List<SortField<?>> determineOrder(IndexProperties index) {

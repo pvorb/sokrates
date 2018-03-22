@@ -7,6 +7,7 @@ import de.vorb.sokrates.db.repositories.PageTagRepository;
 import de.vorb.sokrates.db.repositories.TagRepository;
 import de.vorb.sokrates.generator.pandoc.PandocRunner;
 import de.vorb.sokrates.generator.pandoc.PandocSourceFileFormat;
+import de.vorb.sokrates.generator.pebble.PebbleRenderer;
 import de.vorb.sokrates.model.PageMetaData;
 import de.vorb.sokrates.model.SourceFileMatch;
 import de.vorb.sokrates.properties.SokratesProperties;
