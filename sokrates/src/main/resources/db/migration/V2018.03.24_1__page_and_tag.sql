@@ -1,16 +1,13 @@
 CREATE TABLE page (
-  id                 IDENTITY    NOT NULL,
-  source_file_path   VARCHAR     NOT NULL,
+  id                 IDENTITY    NOT NULL PRIMARY KEY,
+  source_file_path   VARCHAR     NOT NULL UNIQUE,
   source_file_format VARCHAR(64) NOT NULL,
-  output_file_path   VARCHAR     NOT NULL,
+  url                VARCHAR     NOT NULL UNIQUE,
   title              VARCHAR     NOT NULL,
   created_at         DATE        NOT NULL,
   last_modified_at   DATE        NOT NULL,
   locale             VARCHAR(16) NOT NULL,
-  checksum           BINARY(20)  NOT NULL,
-  PRIMARY KEY (id),
-  UNIQUE (source_file_path),
-  UNIQUE (output_file_path)
+  checksum           BINARY(20)  NOT NULL
 );
 
 CREATE INDEX idx__page__created_at

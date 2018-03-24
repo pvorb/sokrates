@@ -70,7 +70,7 @@ public class Keys {
     private static class UniqueKeys0 extends AbstractKeys {
         public static final UniqueKey<PageRecord> CONSTRAINT_2 = createUniqueKey(Page.PAGE, "CONSTRAINT_2", Page.PAGE.ID);
         public static final UniqueKey<PageRecord> CONSTRAINT_25 = createUniqueKey(Page.PAGE, "CONSTRAINT_25", Page.PAGE.SOURCE_FILE_PATH);
-        public static final UniqueKey<PageRecord> CONSTRAINT_255 = createUniqueKey(Page.PAGE, "CONSTRAINT_255", Page.PAGE.OUTPUT_FILE_PATH);
+        public static final UniqueKey<PageRecord> CONSTRAINT_255 = createUniqueKey(Page.PAGE, "CONSTRAINT_255", Page.PAGE.URL);
         public static final UniqueKey<PageTagRecord> CONSTRAINT_6 = createUniqueKey(PageTag.PAGE_TAG, "CONSTRAINT_6", PageTag.PAGE_TAG.TAG_ID, PageTag.PAGE_TAG.PAGE_ID);
         public static final UniqueKey<TagRecord> CONSTRAINT_1 = createUniqueKey(Tag.TAG, "CONSTRAINT_1", Tag.TAG.ID);
         public static final UniqueKey<TagRecord> CONSTRAINT_14 = createUniqueKey(Tag.TAG, "CONSTRAINT_14", Tag.TAG.NAME);

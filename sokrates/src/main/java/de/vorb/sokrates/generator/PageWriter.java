@@ -24,6 +24,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -83,11 +84,17 @@ public class PageWriter {
 
             createMissingTags(pageMetaData.getTags());
 
-            final Path outputFilePath = determineOutputFilePath(sourceFileMatch, pageMetaData);
+            final Path relativeOutputFilePath = determineRelativeOutputFilePath(sourceFileMatch, pageMetaData);
+            final Path outputFilePath = sokratesProperties.getDirectory().getOutput().resolve(relativeOutputFilePath);
 
-            final Page page = createPage(sourceFileMatch, pageMetaData, outputFilePath, checksum);
+            ensureOutputDirectoryExists(outputFilePath.getParent());
 
-            renderPage(page, pageMetaData);
+            final URI url = URI.create('/' + relativeOutputFilePath.toString().replace('\\', '/'));
+            log.info("Relative URL: {}", url);
+
+            final Page page = createPage(sourceFileMatch, pageMetaData, url, checksum);
+
+            renderPage(page, pageMetaData, outputFilePath);
 
             storePage(page, existingPage);
 
@@ -108,19 +115,16 @@ public class PageWriter {
         log.info("Created {} missing tags", numberOfCreatedTags);
     }
 
-    private Path determineOutputFilePath(SourceFileMatch sourceFileMatch, PageMetaData pageMetaData) {
+    private Path determineRelativeOutputFilePath(SourceFileMatch sourceFileMatch, PageMetaData pageMetaData) {
+
         final Path sourceFileName = Optional.ofNullable(pageMetaData.getAlias())
-                .map(Paths::get)
                 .orElse(sourceFileMatch.getFilePath().getFileName());
 
         final Path relativePath = sourceFileMatch.getBaseDirectoryPath().relativize(sourceFileMatch.getFilePath());
-        final Path outputDirectory = sokratesProperties.getDirectory().getOutput()
-                .resolve(relativePath)
-                .getParent();
-        ensureOutputDirectoryExists(outputDirectory);
 
         final Path outputFileName = mapFileExtension(sourceFileName);
-        return outputDirectory.resolve(outputFileName);
+
+        return relativePath.resolveSibling(outputFileName);
     }
 
     private Path mapFileExtension(Path fileName) {
@@ -169,12 +173,12 @@ public class PageWriter {
         }
     }
 
-    private Page createPage(SourceFileMatch sourceFileMatch, PageMetaData pageMetaData, Path outputFilePath,
+    private Page createPage(SourceFileMatch sourceFileMatch, PageMetaData pageMetaData, URI url,
             byte[] checksum) {
         return new Page()
                 .setSourceFilePath(sourceFileMatch.getFilePath())
                 .setSourceFileFormat(sourceFileMatch.getFormat().getFormat())
-                .setOutputFilePath(outputFilePath)
+                .setUrl(url)
                 .setTitle(pageMetaData.getTitle())
                 .setCreatedAt(pageMetaData.getCreatedAt())
                 .setLastModifiedAt(pageMetaData.getLastModifiedAt())
@@ -182,16 +186,15 @@ public class PageWriter {
                 .setChecksum(checksum);
     }
 
-    private void renderPage(Page page, PageMetaData pageMetaData) {
+    private void renderPage(Page page, PageMetaData pageMetaData, Path outputFilePath) {
 
         final Locale locale = getDocumentLocale(page);
         final String htmlContent =
                 pandocRunner.convertFile(page.getSourceFilePath(), locale,
                         PandocSourceFileFormat.forString(page.getSourceFileFormat()), HTML5);
 
-        final Path outputFilePath = page.getOutputFilePath();
         try (final Writer writer = openWriter(outputFilePath)) {
-            pebbleRenderer.renderPage(writer, pageMetaData, htmlContent);
+            pebbleRenderer.renderPage(writer, page, pageMetaData, htmlContent);
             log.info("Rendered file {} to {}", page.getSourceFilePath(), outputFilePath);
         } catch (IOException e) {
             log.error("Could not write file {}", outputFilePath);

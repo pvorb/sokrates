@@ -245,9 +245,13 @@
                                 <forcedType>
                                     <userType>java.nio.file.Path</userType>
                                     <converter>de.vorb.sokrates.db.converters.PathConverter</converter>
-                                    <expression>public\.page\.\w+_file_path</expression>
+                                    <expression>public\.page\.source_file_path</expression>
                                 </forcedType>
-                                PathConverter
+                                <forcedType>
+                                    <userType>java.net.URI</userType>
+                                    <converter>de.vorb.sokrates.db.converters.UrlConverter</converter>
+                                    <expression>public\.page\.url</expression>
+                                </forcedType>
                             </forcedTypes>
                         </database>
                         <target>

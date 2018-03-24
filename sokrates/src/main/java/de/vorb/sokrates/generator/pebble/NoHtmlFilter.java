@@ -7,7 +7,7 @@ import org.owasp.html.PolicyFactory;
 import java.util.List;
 import java.util.Map;
 
-public class PlainTextFilter implements Filter {
+public class NoHtmlFilter implements Filter {
 
     private static final PolicyFactory NO_HTML_POLICY = new HtmlPolicyBuilder().toFactory();
 

@@ -1,7 +1,7 @@
 {% extends 'base.peb' %}
 
 {% block title %}
-    {{ title | plain }}
+    {{ title | noHtml }}
 {% endblock %}
 
 {% block content %}

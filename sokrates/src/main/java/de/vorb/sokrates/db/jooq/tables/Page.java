@@ -6,11 +6,13 @@ package de.vorb.sokrates.db.jooq.tables;
 
 import de.vorb.sokrates.db.converters.LocaleConverter;
 import de.vorb.sokrates.db.converters.PathConverter;
+import de.vorb.sokrates.db.converters.UrlConverter;
 import de.vorb.sokrates.db.jooq.Indexes;
 import de.vorb.sokrates.db.jooq.Keys;
 import de.vorb.sokrates.db.jooq.Public;
 import de.vorb.sokrates.db.jooq.tables.records.PageRecord;
 
+import java.net.URI;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -44,7 +46,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Page extends TableImpl<PageRecord> {
 
-    private static final long serialVersionUID = 2086526137;
+    private static final long serialVersionUID = 1197174070;
 
     /**
      * The reference instance of <code>PUBLIC.PAGE</code>
@@ -75,9 +77,9 @@ public class Page extends TableImpl<PageRecord> {
     public final TableField<PageRecord, String> SOURCE_FILE_FORMAT = createField("SOURCE_FILE_FORMAT", org.jooq.impl.SQLDataType.VARCHAR(64).nullable(false), this, "");
 
     /**
-     * The column <code>PUBLIC.PAGE.OUTPUT_FILE_PATH</code>.
+     * The column <code>PUBLIC.PAGE.URL</code>.
      */
-    public final TableField<PageRecord, Path> OUTPUT_FILE_PATH = createField("OUTPUT_FILE_PATH", org.jooq.impl.SQLDataType.VARCHAR(2147483647).nullable(false), this, "", new PathConverter());
+    public final TableField<PageRecord, URI> URL = createField("URL", org.jooq.impl.SQLDataType.VARCHAR(2147483647).nullable(false), this, "", new UrlConverter());
 
     /**
      * The column <code>PUBLIC.PAGE.TITLE</code>.

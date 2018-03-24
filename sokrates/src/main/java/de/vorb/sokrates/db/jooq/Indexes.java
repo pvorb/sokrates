@@ -48,7 +48,7 @@ public class Indexes {
 
     private static class Indexes0 extends AbstractKeys {
         public static Index CONSTRAINT_INDEX_2 = createIndex("CONSTRAINT_INDEX_2", Page.PAGE, new OrderField[] { Page.PAGE.SOURCE_FILE_PATH }, true);
-        public static Index CONSTRAINT_INDEX_25 = createIndex("CONSTRAINT_INDEX_25", Page.PAGE, new OrderField[] { Page.PAGE.OUTPUT_FILE_PATH }, true);
+        public static Index CONSTRAINT_INDEX_25 = createIndex("CONSTRAINT_INDEX_25", Page.PAGE, new OrderField[] { Page.PAGE.URL }, true);
         public static Index IDX__PAGE__CREATED_AT = createIndex("IDX__PAGE__CREATED_AT", Page.PAGE, new OrderField[] { Page.PAGE.CREATED_AT }, false);
         public static Index IDX__PAGE__LAST_MODIFIED_AT = createIndex("IDX__PAGE__LAST_MODIFIED_AT", Page.PAGE, new OrderField[] { Page.PAGE.LAST_MODIFIED_AT }, false);
         public static Index PRIMARY_KEY_2 = createIndex("PRIMARY_KEY_2", Page.PAGE, new OrderField[] { Page.PAGE.ID }, true);

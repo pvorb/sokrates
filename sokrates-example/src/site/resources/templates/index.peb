@@ -1,7 +1,7 @@
 {% extends 'base.peb' %}
 
 {% block title %}
-    {{ index.title }} | {{ site.title }}
+    {{ index.title | noHtml }} | {{ site.title | noHtml }}
 {% endblock %}
 
 {% block content %}
@@ -9,7 +9,7 @@
         <h2>{{ entry.key }}</h2>
         <ul>
         {% for page in entry.value %}
-            <li>{{ page.createdAt }} &ndash; {{ page.title | raw }}</li>
+            <li><a href="{{ page.url }}">{{ page.createdAt }} &ndash; {{ page.title | raw }}</a></li>
         {% endfor %}
         </ul>
     {% endfor %}

@@ -26,11 +26,12 @@ public class PebbleRenderer {
     private final PebbleEngine pebbleEngine;
     private final SokratesProperties sokratesProperties;
 
-    public void renderPage(Writer writer, PageMetaData pageMetaData, String content) {
+    public void renderPage(Writer writer, Page page, PageMetaData pageMetaData,
+            String content) {
         final String templateName = pageMetaData.getTemplate();
         try {
             final PebbleTemplate pebbleTemplate = pebbleEngine.getTemplate(templateName);
-            final Map<String, Object> context = getRenderingContext(pageMetaData, content);
+            final Map<String, Object> context = getRenderingContext(page, pageMetaData, content);
             pebbleTemplate.evaluate(writer, context);
         } catch (PebbleException e) {
             throw new RuntimeException("Unable to render file", e);
@@ -39,9 +40,11 @@ public class PebbleRenderer {
         }
     }
 
-    private Map<String, Object> getRenderingContext(PageMetaData pageMetaData, String content) {
-        final Map<String, Object> context = new HashMap<>(pageMetaData.toMap());
+    private Map<String, Object> getRenderingContext(Page page, PageMetaData pageMetaData, String content) {
+        final Map<String, Object> context = pageMetaData.toMap();
+        context.put("url", page.getUrl());
         context.put("content", content);
+        context.put("site", sokratesProperties.getSite());
         return context;
     }
 

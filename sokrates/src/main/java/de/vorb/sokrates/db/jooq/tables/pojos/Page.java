@@ -5,6 +5,7 @@ package de.vorb.sokrates.db.jooq.tables.pojos;
 
 
 import java.io.Serializable;
+import java.net.URI;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.Locale;
@@ -25,12 +26,12 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Page implements Serializable {
 
-    private static final long serialVersionUID = -1380288766;
+    private static final long serialVersionUID = -2037046826;
 
     private Long      id;
     private Path      sourceFilePath;
     private String    sourceFileFormat;
-    private Path      outputFilePath;
+    private URI       url;
     private String    title;
     private LocalDate createdAt;
     private LocalDate lastModifiedAt;
@@ -43,7 +44,7 @@ public class Page implements Serializable {
         this.id = value.id;
         this.sourceFilePath = value.sourceFilePath;
         this.sourceFileFormat = value.sourceFileFormat;
-        this.outputFilePath = value.outputFilePath;
+        this.url = value.url;
         this.title = value.title;
         this.createdAt = value.createdAt;
         this.lastModifiedAt = value.lastModifiedAt;
@@ -55,7 +56,7 @@ public class Page implements Serializable {
         Long      id,
         Path      sourceFilePath,
         String    sourceFileFormat,
-        Path      outputFilePath,
+        URI       url,
         String    title,
         LocalDate createdAt,
         LocalDate lastModifiedAt,
@@ -65,7 +66,7 @@ public class Page implements Serializable {
         this.id = id;
         this.sourceFilePath = sourceFilePath;
         this.sourceFileFormat = sourceFileFormat;
-        this.outputFilePath = outputFilePath;
+        this.url = url;
         this.title = title;
         this.createdAt = createdAt;
         this.lastModifiedAt = lastModifiedAt;
@@ -100,12 +101,12 @@ public class Page implements Serializable {
         return this;
     }
 
-    public Path getOutputFilePath() {
-        return this.outputFilePath;
+    public URI getUrl() {
+        return this.url;
     }
 
-    public Page setOutputFilePath(Path outputFilePath) {
-        this.outputFilePath = outputFilePath;
+    public Page setUrl(URI url) {
+        this.url = url;
         return this;
     }
 
@@ -161,7 +162,7 @@ public class Page implements Serializable {
         sb.append(id);
         sb.append(", ").append(sourceFilePath);
         sb.append(", ").append(sourceFileFormat);
-        sb.append(", ").append(outputFilePath);
+        sb.append(", ").append(url);
         sb.append(", ").append(title);
         sb.append(", ").append(createdAt);
         sb.append(", ").append(lastModifiedAt);
