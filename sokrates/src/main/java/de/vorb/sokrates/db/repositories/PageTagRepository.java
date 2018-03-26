@@ -2,7 +2,6 @@ package de.vorb.sokrates.db.repositories;
 
 import de.vorb.sokrates.db.jooq.tables.pojos.Page;
 
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.jooq.Record1;
