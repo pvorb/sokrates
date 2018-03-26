@@ -18,11 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Nullable;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.Reader;
 import java.io.Writer;
 import java.net.URI;
 import java.nio.file.Files;
@@ -77,7 +74,7 @@ public class PageWriter {
                 continue;
             }
 
-            final PageMetaData pageMetaData = parsePageMetaData(sourceFileMatch);
+            final PageMetaData pageMetaData = pageMetaDataParser.parseMetaDataFrom(sourceFileMatch.getFilePath());
             if (pageMetaData == null) {
                 continue;
             }
@@ -86,24 +83,23 @@ public class PageWriter {
 
             final Path relativeOutputFilePath = determineRelativeOutputFilePath(sourceFileMatch, pageMetaData);
             final Path outputFilePath = sokratesProperties.getDirectory().getOutput().resolve(relativeOutputFilePath);
+            final URI url = getUrlFromOutputFilePath(relativeOutputFilePath);
 
             ensureOutputDirectoryExists(outputFilePath.getParent());
 
-            final URI url = URI.create('/' + relativeOutputFilePath.toString().replace('\\', '/'));
-            log.info("Relative URL: {}", url);
-
             final Page page = createPage(sourceFileMatch, pageMetaData, url, checksum);
-
             renderPage(page, pageMetaData, outputFilePath);
-
             storePage(page, existingPage);
-
             linkPageToTags(page, pageMetaData.getTags());
 
             numberOfWrittenPages++;
         }
 
         log.info("Wrote {} pages", numberOfWrittenPages);
+    }
+
+    private URI getUrlFromOutputFilePath(Path relativeOutputFilePath) {
+        return URI.create('/' + relativeOutputFilePath.toString().replace('\\', '/'));
     }
 
     private boolean isPageNewOrChanged(byte[] newChecksum, Page existingPage) {
@@ -140,31 +136,6 @@ public class PageWriter {
         }
     }
 
-    @Nullable
-    private PageMetaData parsePageMetaData(SourceFileMatch sourceFileMatch) {
-
-        final Path sourceFilePath = sourceFileMatch.getFilePath();
-
-        try (final Reader reader = openReader(sourceFilePath)) {
-
-            final PageMetaData pageMetaData = pageMetaDataParser.parseMetaDataFrom(reader);
-
-            if (pageMetaData.getLocale() == null) {
-                pageMetaData.setLocale(sokratesProperties.getSite().getDefaultLocale());
-            }
-
-            return pageMetaData;
-
-        } catch (IOException e) {
-            log.error("Could not read file {}", sourceFilePath);
-            return null;
-        }
-    }
-
-    private BufferedReader openReader(Path file) throws IOException {
-        return Files.newBufferedReader(file, UTF_8);
-    }
-
     private void ensureOutputDirectoryExists(Path outputDirectory) {
         try {
             Files.createDirectories(outputDirectory);
@@ -188,21 +159,21 @@ public class PageWriter {
 
     private void renderPage(Page page, PageMetaData pageMetaData, Path outputFilePath) {
 
-        final Locale locale = getDocumentLocale(page);
+        final Locale locale = getPageLocale(page);
         final String htmlContent =
                 pandocRunner.convertFile(page.getSourceFilePath(), locale,
                         PandocSourceFileFormat.forString(page.getSourceFileFormat()), HTML5);
 
         try (final Writer writer = openWriter(outputFilePath)) {
             pebbleRenderer.renderPage(writer, page, pageMetaData, htmlContent);
-            log.info("Rendered file {} to {}", page.getSourceFilePath(), outputFilePath);
+            log.info("Rendered page {} to {}", page.getSourceFilePath(), outputFilePath);
         } catch (IOException e) {
             log.error("Could not write file {}", outputFilePath);
         }
 
     }
 
-    private Locale getDocumentLocale(Page page) {
+    private Locale getPageLocale(Page page) {
         return Optional.ofNullable(page.getLocale())
                 .orElse(sokratesProperties.getSite().getDefaultLocale());
     }

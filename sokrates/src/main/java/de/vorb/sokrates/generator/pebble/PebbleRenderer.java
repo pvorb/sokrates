@@ -26,18 +26,10 @@ public class PebbleRenderer {
     private final PebbleEngine pebbleEngine;
     private final SokratesProperties sokratesProperties;
 
-    public void renderPage(Writer writer, Page page, PageMetaData pageMetaData,
-            String content) {
+    public void renderPage(Writer writer, Page page, PageMetaData pageMetaData, String content) {
         final String templateName = pageMetaData.getTemplate();
-        try {
-            final PebbleTemplate pebbleTemplate = pebbleEngine.getTemplate(templateName);
-            final Map<String, Object> context = getRenderingContext(page, pageMetaData, content);
-            pebbleTemplate.evaluate(writer, context);
-        } catch (PebbleException e) {
-            throw new RuntimeException("Unable to render file", e);
-        } catch (IOException e) {
-            throw new RuntimeException("Unable to write file", e);
-        }
+        final Map<String, Object> context = getRenderingContext(page, pageMetaData, content);
+        renderFile(writer, templateName, context);
     }
 
     private Map<String, Object> getRenderingContext(Page page, PageMetaData pageMetaData, String content) {
@@ -51,13 +43,41 @@ public class PebbleRenderer {
     public void renderIndexFile(Writer writer, IndexProperties index, List<Page> pages,
             Map<Object, List<Page>> groupedIndexPages) {
         final String templateName = index.getTemplate();
+        final Map<String, Object> context = new HashMap<>();
+        context.put("index", index);
+        context.put("pages", pages);
+        context.put("groupedPages", groupedIndexPages);
+        context.put("site", sokratesProperties.getSite());
+        renderFile(writer, templateName, context);
+    }
+
+    public void renderTagFile(Writer writer, String tag, String tagContent, PageMetaData metaData, List<Page> pages) {
+        final Map<String, Object> context;
+        if (metaData != null) {
+            context = metaData.toMap();
+        } else {
+            context = new HashMap<>();
+        }
+
+        if (tagContent != null) {
+            context.put("content", tagContent);
+        }
+
+        if (!context.containsKey("title")) {
+            context.put("title", tag);
+        }
+
+        context.put("pages", pages);
+        context.put("site", sokratesProperties.getSite());
+
+        final String templateName = sokratesProperties.getGenerator().getTagRule().getTemplate();
+
+        renderFile(writer, templateName, context);
+    }
+
+    public void renderFile(Writer writer, String templateName, Map<String, Object> context) {
         try {
             final PebbleTemplate pebbleTemplate = pebbleEngine.getTemplate(templateName);
-            final Map<String, Object> context = new HashMap<>();
-            context.put("index", index);
-            context.put("pages", pages);
-            context.put("groupedPages", groupedIndexPages);
-            context.put("site", sokratesProperties.getSite());
             pebbleTemplate.evaluate(writer, context);
         } catch (PebbleException e) {
             throw new RuntimeException("Unable to render file", e);
@@ -65,5 +85,4 @@ public class PebbleRenderer {
             throw new RuntimeException("Unable to write file", e);
         }
     }
-
 }

@@ -1,3 +1,7 @@
+logging.level:
+  root: WARN
+  de.vorb.sokrates: INFO
+
 spring.datasource:
   url: jdbc:h2:./sokrates
   driver-class-name: org.h2.Driver
@@ -11,18 +15,25 @@ sokrates:
     default-locale: en-US
   directory:
     output: out/
-    templates: src/site/resources/templates/
+    templates: src/site/templates/
   generator:
     pandoc-executable: E:\Program Files\Pandoc\pandoc.exe
     extension-mapping:
       md: html
     generate-rules:
-      - pattern: src/site/markdown/**/*.md
-        base-directory: src/site/markdown
+      - pattern: src/site/posts/**/*.md
+        base-directory: src/site/posts
         format: markdown
     copy-rules:
-      - pattern: src/site/markdown/**/*
-        base-directory: src/site/markdown
+      - pattern: src/site/posts/**/*
+        base-directory: src/site/posts
+    tag-rule:
+      source-file-pattern: "src/site/tags/%s.md"
+      output-file-pattern: "tag/%s.html"
+      format: markdown
+      template: tag.peb
+      index-output-file: tags/index.html
+      index-template: tag-index.peb
   indexes:
     - name: Blog index
       title: Blog index

@@ -1,0 +1,19 @@
+{% extends 'base.peb' %}
+
+{% block title %}
+    {{ title | noHtml }}
+{% endblock %}
+
+{% block content %}
+    <h1>{{ title | raw }}</h1>
+
+    <div id="content">
+        {{ content | raw }}
+    </div>
+
+    <ul id="pages">
+    {% for page in pages %}
+        <li><a href="{{ page.url }}">{{ page.createdAt }} &ndash; {{ page.title | raw }}</a></li>
+    {% endfor %}
+    </ul>
+{% endblock %}

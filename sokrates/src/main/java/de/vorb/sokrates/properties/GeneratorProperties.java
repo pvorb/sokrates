@@ -15,5 +15,6 @@ public class GeneratorProperties {
     private Map<String, String> extensionMapping = new HashMap<>();
     private List<SourceFileRuleProperties> generateRules = new ArrayList<>();
     private List<SourceFileRuleProperties> copyRules = new ArrayList<>();
+    private TagRule tagRule;
 
 }
