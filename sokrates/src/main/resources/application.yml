@@ -1,6 +1,7 @@
 logging.level:
   root: WARN
   de.vorb.sokrates: INFO
+  org.jooq.Constants: INFO
 
 spring.datasource:
   url: jdbc:h2:./sokrates

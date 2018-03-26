@@ -13,6 +13,7 @@
 
     <modules>
         <module>sokrates</module>
+        <module>sokrates-example</module>
     </modules>
 
     <parent>

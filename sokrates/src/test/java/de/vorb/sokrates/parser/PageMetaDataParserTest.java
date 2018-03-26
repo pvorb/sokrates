@@ -1,14 +1,12 @@
 package de.vorb.sokrates.parser;
 
 import de.vorb.sokrates.generator.PageMetaDataParser;
+import de.vorb.sokrates.generator.YamlConfiguration;
 import de.vorb.sokrates.model.PageMetaData;
 
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -17,16 +15,17 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = NONE)
 public class PageMetaDataParserTest {
 
     private static final ClassPathResource SAMPLE_FILE = new ClassPathResource("/sample-with-front-matter.md");
 
-    @Autowired
     private PageMetaDataParser pageMetaDataParser;
+
+    @Before
+    public void setUp() {
+        pageMetaDataParser = new PageMetaDataParser(new YamlConfiguration().yamlObjectMapper());
+    }
 
     @Test
     public void parseFrontMatter() throws Exception {
