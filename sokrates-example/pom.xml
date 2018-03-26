@@ -58,7 +58,7 @@
                     <dependency>
                         <groupId>de.vorb</groupId>
                         <artifactId>sokrates</artifactId>
-                        <version>0.1.0-SNAPSHOT</version>
+                        <version>${parent.version}</version>
                     </dependency>
                 </dependencies>
             </plugin>
