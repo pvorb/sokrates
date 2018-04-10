@@ -2,7 +2,7 @@ package de.vorb.sokrates.generator;
 
 import de.vorb.sokrates.db.jooq.tables.pojos.Page;
 import de.vorb.sokrates.db.repositories.PageRepository;
-import de.vorb.sokrates.generator.pebble.PebbleRenderer;
+import de.vorb.sokrates.generator.tpl.TemplateRenderer;
 import de.vorb.sokrates.properties.IndexProperties;
 import de.vorb.sokrates.properties.SokratesProperties;
 
@@ -33,7 +33,7 @@ public class IndexWriter {
 
     private final SokratesProperties sokratesProperties;
     private final PageRepository pageRepository;
-    private final PebbleRenderer pebbleRenderer;
+    private final TemplateRenderer templateRenderer;
 
     @Transactional
     public void writeIndexFiles() {
@@ -60,7 +60,7 @@ public class IndexWriter {
         ensureOutputDirectoryExists(outputFilePath.getParent());
 
         try (final BufferedWriter writer = openBufferedWriter(outputFilePath)) {
-            pebbleRenderer.renderIndexFile(writer, index, indexPages, groupedIndexPages);
+            templateRenderer.renderIndexFile(writer, index, indexPages, groupedIndexPages);
             log.info("Rendered index \"{}\" to {}", index.getName(), outputFilePath);
         } catch (IOException e) {
             log.error("Could not write index file", e);

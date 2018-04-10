@@ -3,6 +3,7 @@ package de.vorb.sokrates.cli;
 import de.vorb.sokrates.app.SokratesApp;
 
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
@@ -28,12 +29,12 @@ public interface InjectableCommand extends Runnable {
 
         final ConfigurableApplicationContext applicationContext = new SpringApplicationBuilder(SokratesApp.class)
                 .parent(parentContext)
-                .web(isWebApplication())
+                .web(isWebApplication() ? WebApplicationType.SERVLET : WebApplicationType.NONE)
                 .build()
                 .run();
 
         if (closesAutomatically()) {
-                applicationContext.close();
+            applicationContext.close();
         }
     }
 

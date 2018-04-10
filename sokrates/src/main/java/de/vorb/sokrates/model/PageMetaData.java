@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 @Data
@@ -29,7 +28,7 @@ public class PageMetaData {
     private Locale locale;
     private Set<String> tags;
 
-    private Properties properties;
+    private Map<String, Object> properties;
 
     public Map<String, Object> toMap() {
         final Map<String, Object> map = new HashMap<>();
@@ -44,6 +43,7 @@ public class PageMetaData {
         }
         if (locale != null) {
             map.put("locale", locale.toLanguageTag());
+            map.put("language", locale.getLanguage());
         }
         if (tags != null) {
             map.put("tags", Collections.unmodifiableSet(tags));

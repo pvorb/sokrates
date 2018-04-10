@@ -1,4 +1,4 @@
-package de.vorb.sokrates.generator.pebble;
+package de.vorb.sokrates.generator.tpl.pebble;
 
 import com.google.common.collect.ImmutableMap;
 import com.mitchellbosecke.pebble.extension.AbstractExtension;
@@ -10,7 +10,10 @@ public class SokratesPebbleExtension extends AbstractExtension {
 
     @Override
     public Map<String, Filter> getFilters() {
-        return ImmutableMap.of("noHtml", new NoHtmlFilter());
+        return ImmutableMap.of(
+                "noHtml", new NoHtmlFilter(),
+                "split", new SplitFilter()
+        );
     }
 
 }

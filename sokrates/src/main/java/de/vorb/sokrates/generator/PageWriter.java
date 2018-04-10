@@ -7,7 +7,7 @@ import de.vorb.sokrates.db.repositories.PageTagRepository;
 import de.vorb.sokrates.db.repositories.TagRepository;
 import de.vorb.sokrates.generator.pandoc.PandocRunner;
 import de.vorb.sokrates.generator.pandoc.PandocSourceFileFormat;
-import de.vorb.sokrates.generator.pebble.PebbleRenderer;
+import de.vorb.sokrates.generator.tpl.TemplateRenderer;
 import de.vorb.sokrates.model.PageMetaData;
 import de.vorb.sokrates.model.SourceFileMatch;
 import de.vorb.sokrates.properties.SokratesProperties;
@@ -54,7 +54,7 @@ public class PageWriter {
     private final PageMetaDataParser pageMetaDataParser;
     private final Sha1ChecksumCalculator sha1ChecksumCalculator;
     private final PandocRunner pandocRunner;
-    private final PebbleRenderer pebbleRenderer;
+    private final TemplateRenderer templateRenderer;
 
     @Transactional
     public void writePages() {
@@ -165,7 +165,7 @@ public class PageWriter {
                         PandocSourceFileFormat.forString(page.getSourceFileFormat()), HTML5);
 
         try (final Writer writer = openWriter(outputFilePath)) {
-            pebbleRenderer.renderPage(writer, page, pageMetaData, htmlContent);
+            templateRenderer.renderPage(writer, page, pageMetaData, htmlContent);
             log.info("Rendered page {} to {}", page.getSourceFilePath(), outputFilePath);
         } catch (IOException e) {
             log.error("Could not write file {}", outputFilePath);

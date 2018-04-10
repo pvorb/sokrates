@@ -3,7 +3,7 @@ package de.vorb.sokrates.generator;
 import de.vorb.sokrates.db.jooq.tables.pojos.Page;
 import de.vorb.sokrates.db.repositories.PageTagRepository;
 import de.vorb.sokrates.generator.pandoc.PandocRunner;
-import de.vorb.sokrates.generator.pebble.PebbleRenderer;
+import de.vorb.sokrates.generator.tpl.TemplateRenderer;
 import de.vorb.sokrates.model.PageMetaData;
 import de.vorb.sokrates.properties.SokratesProperties;
 import de.vorb.sokrates.properties.TagRule;
@@ -40,7 +40,7 @@ public class TagWriter {
     private final PageTagRepository pageTagRepository;
     private final PageMetaDataParser pageMetaDataParser;
     private final PandocRunner pandocRunner;
-    private final PebbleRenderer pebbleRenderer;
+    private final TemplateRenderer templateRenderer;
 
     @Transactional
     public void writeTagFiles() {
@@ -71,7 +71,7 @@ public class TagWriter {
             ensureOutputDirectoryExists(outputFilePath.getParent());
 
             try (final Writer writer = openWriter(outputFilePath)) {
-                pebbleRenderer.renderTagFile(writer, tag, tagContent, metaData, pages);
+                templateRenderer.renderTagFile(writer, tag, tagContent, metaData, pages);
                 log.info("Rendered tag \"{}\" to {}", tag, outputFilePath);
                 numberOfWrittenTagFiles++;
             } catch (IOException e) {
@@ -88,7 +88,7 @@ public class TagWriter {
         final TagRule tagRule = sokratesProperties.getGenerator().getTagRule();
         final Path tagIndexFilePath = determineOutputFilePath("index");
         try (final Writer writer = openWriter(tagIndexFilePath)) {
-            pebbleRenderer.renderFile(writer, tagRule.getIndexTemplate(), Collections.singletonMap("tags", tags));
+            templateRenderer.renderFile(writer, tagRule.getIndexTemplate(), Collections.singletonMap("tags", tags));
             log.info("Rendered tag index to {}", tagIndexFilePath);
         } catch (IOException e) {
             log.error("Could not write file {}", tagIndexFilePath);

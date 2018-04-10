@@ -32,7 +32,7 @@ public class PageMetaDataParser {
         try (final Reader reader = openReader(sourceFilePath)) {
             return parseMetaDataFrom(reader);
         } catch (IOException e) {
-            log.error("Could not parse meta data from file {}", sourceFilePath);
+            log.error("Could not parse meta data from file {}", sourceFilePath, e);
             return null;
         }
     }

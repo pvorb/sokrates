@@ -37,6 +37,11 @@
                         <configuration>
                             <executable>java</executable>
                             <arguments>
+                                <!-- uncomment for debugging -->
+                                <!--
+                                <argument>-Xdebug</argument>
+                                <argument>-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005</argument>
+                                -->
                                 <argument>-classpath</argument>
                                 <classpath/>
                                 <argument>de.vorb.sokrates.app.SokratesApp</argument>

@@ -1,18 +1,14 @@
-package de.vorb.sokrates.generator.pebble;
+package de.vorb.sokrates.generator.tpl;
 
 import de.vorb.sokrates.db.jooq.tables.pojos.Page;
 import de.vorb.sokrates.model.PageMetaData;
 import de.vorb.sokrates.properties.IndexProperties;
 import de.vorb.sokrates.properties.SokratesProperties;
 
-import com.mitchellbosecke.pebble.PebbleEngine;
-import com.mitchellbosecke.pebble.error.PebbleException;
-import com.mitchellbosecke.pebble.template.PebbleTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.List;
@@ -21,18 +17,18 @@ import java.util.Map;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class PebbleRenderer {
+public class TemplateRenderer {
 
-    private final PebbleEngine pebbleEngine;
     private final SokratesProperties sokratesProperties;
+    private final List<TemplateEngine> templateEngines;
 
     public void renderPage(Writer writer, Page page, PageMetaData pageMetaData, String content) {
         final String templateName = pageMetaData.getTemplate();
         final Map<String, Object> context = getRenderingContext(page, pageMetaData, content);
-        renderFile(writer, templateName, context);
+        getEngineForTemplateName(templateName).renderFile(writer, templateName, context);
     }
 
-    private Map<String, Object> getRenderingContext(Page page, PageMetaData pageMetaData, String content) {
+    public Map<String, Object> getRenderingContext(Page page, PageMetaData pageMetaData, String content) {
         final Map<String, Object> context = pageMetaData.toMap();
         context.put("url", page.getUrl());
         context.put("content", content);
@@ -48,7 +44,7 @@ public class PebbleRenderer {
         context.put("pages", pages);
         context.put("groupedPages", groupedIndexPages);
         context.put("site", sokratesProperties.getSite());
-        renderFile(writer, templateName, context);
+        getEngineForTemplateName(templateName).renderFile(writer, templateName, context);
     }
 
     public void renderTagFile(Writer writer, String tag, String tagContent, PageMetaData metaData, List<Page> pages) {
@@ -72,17 +68,17 @@ public class PebbleRenderer {
 
         final String templateName = sokratesProperties.getGenerator().getTagRule().getTemplate();
 
-        renderFile(writer, templateName, context);
+        getEngineForTemplateName(templateName).renderFile(writer, templateName, context);
     }
 
     public void renderFile(Writer writer, String templateName, Map<String, Object> context) {
-        try {
-            final PebbleTemplate pebbleTemplate = pebbleEngine.getTemplate(templateName);
-            pebbleTemplate.evaluate(writer, context);
-        } catch (PebbleException e) {
-            throw new RuntimeException("Unable to render file", e);
-        } catch (IOException e) {
-            throw new RuntimeException("Unable to write file", e);
-        }
+        getEngineForTemplateName(templateName).renderFile(writer, templateName, context);
     }
+
+    private TemplateEngine getEngineForTemplateName(String templateName) {
+        return templateEngines.stream().filter(templateEngine -> templateEngine.matches(templateName)).findFirst()
+                .orElseThrow(
+                        () -> new RuntimeException("No template engine found for template '" + templateName + "'"));
+    }
+
 }

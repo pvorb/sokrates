@@ -1,4 +1,4 @@
-package de.vorb.sokrates.generator.pebble;
+package de.vorb.sokrates.generator.tpl.pebble;
 
 import de.vorb.sokrates.properties.SokratesProperties;
 

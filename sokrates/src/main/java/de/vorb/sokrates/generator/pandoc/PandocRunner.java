@@ -14,6 +14,8 @@ import java.io.Writer;
 import java.nio.file.Path;
 import java.util.Locale;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -59,7 +61,7 @@ public class PandocRunner {
                 inputFile.toString()
         ).start();
 
-        CharStreams.copy(new InputStreamReader(pandocProcess.getInputStream()), output);
+        CharStreams.copy(new InputStreamReader(pandocProcess.getInputStream(), UTF_8), output);
 
         return pandocProcess.waitFor();
     }
