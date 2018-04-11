@@ -1,6 +1,6 @@
 <#ftl output_format="HTML"/>
-
 <#include "base.ftl">
+<@page/>
 
 <#macro page_title>
     <title>${title}</title>
@@ -14,5 +14,3 @@
         ${content?no_esc}
     </div>
 </#macro>
-
-<@page/>
