@@ -168,7 +168,7 @@ public class PageWriter {
             templateRenderer.renderPage(writer, page, pageMetaData, htmlContent);
             log.info("Rendered page {} to {}", page.getSourceFilePath(), outputFilePath);
         } catch (IOException e) {
-            log.error("Could not write file {}", outputFilePath);
+            log.error("Could not write file {}", outputFilePath, e);
         }
 
     }
