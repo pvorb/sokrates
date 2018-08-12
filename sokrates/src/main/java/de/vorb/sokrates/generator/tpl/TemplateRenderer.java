@@ -41,9 +41,10 @@ public class TemplateRenderer {
         context.put("url", page.getUrl());
         context.put("content", content);
         context.put("site", sokratesProperties.getSite());
-        final Integer year = Optional.ofNullable(pageMetaData.getLastModifiedAt()).map(LocalDate::getYear)
-                .orElseGet(() -> Optional.ofNullable(pageMetaData.getCreatedAt()).map(LocalDate::getYear)
-                        .orElse(getCurrentYear()));
+        final Integer year =
+                Optional.ofNullable(pageMetaData.getCreatedAt())
+                        .map(LocalDate::getYear)
+                        .orElse(getCurrentYear());
         context.put("year", year);
         return context;
     }
