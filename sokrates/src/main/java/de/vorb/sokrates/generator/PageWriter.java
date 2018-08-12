@@ -108,7 +108,7 @@ public class PageWriter {
 
     private void createMissingTags(Set<String> tags) {
         final int numberOfCreatedTags = tagRepository.saveTags(tags);
-        log.info("Created {} missing tags", numberOfCreatedTags);
+        log.debug("Created {} missing tags", numberOfCreatedTags);
     }
 
     private Path determineRelativeOutputFilePath(SourceFileMatch sourceFileMatch, PageMetaData pageMetaData) {

@@ -1,6 +1,7 @@
 package de.vorb.sokrates.generator.tpl;
 
 import de.vorb.sokrates.db.jooq.tables.pojos.Page;
+import de.vorb.sokrates.model.CopyrightYears;
 import de.vorb.sokrates.model.PageMetaData;
 import de.vorb.sokrates.properties.IndexProperties;
 import de.vorb.sokrates.properties.SokratesProperties;
@@ -14,10 +15,12 @@ import java.time.Clock;
 import java.time.LocalDate;
 import java.time.Year;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 @Component
@@ -41,12 +44,12 @@ public class TemplateRenderer {
         context.put("url", page.getUrl());
         context.put("content", content);
         context.put("site", sokratesProperties.getSite());
-        final Integer year =
-                Optional.ofNullable(pageMetaData.getCreatedAt())
-                        .map(LocalDate::getYear)
-                        .orElse(getCurrentYear());
-        context.put("year", year);
+        context.put("copyrightYears", getCopyrightYearsFromPageMetaData(pageMetaData));
         return context;
+    }
+
+    private CopyrightYears getCopyrightYearsFromPageMetaData(PageMetaData pageMetaData) {
+        return CopyrightYears.of(pageMetaData.getCreatedAt().getYear(), pageMetaData.getLastModifiedAt().getYear());
     }
 
     public void renderIndexFile(Writer writer, IndexProperties index, List<Page> pages,
@@ -57,7 +60,7 @@ public class TemplateRenderer {
         context.put("pages", pages);
         context.put("groupedPages", groupedIndexPages);
         context.put("site", sokratesProperties.getSite());
-        context.put("year", getCurrentYear());
+        context.put("copyrightYears", getCopyrightYearsFromPages(pages));
         final Locale locale = Optional.ofNullable(index.getLocale())
                 .orElse(sokratesProperties.getSite().getDefaultLocale());
         getEngineForTemplateName(templateName).renderFile(writer, templateName, context, locale);
@@ -82,11 +85,18 @@ public class TemplateRenderer {
 
         context.put("pages", pages);
         context.put("site", sokratesProperties.getSite());
-        context.put("year", getCurrentYear());
+        context.put("copyrightYears", getCopyrightYearsFromPages(pages));
 
         final String templateName = sokratesProperties.getGenerator().getTagRule().getTemplate();
 
         getEngineForTemplateName(templateName).renderFile(writer, templateName, context, locale);
+    }
+
+    private CopyrightYears getCopyrightYearsFromPages(List<Page> pages) {
+        final Set<Integer> years = new HashSet<>();
+        pages.stream().map(Page::getCreatedAt).mapToInt(LocalDate::getYear).min().ifPresent(years::add);
+        pages.stream().map(Page::getLastModifiedAt).mapToInt(LocalDate::getYear).max().ifPresent(years::add);
+        return CopyrightYears.fromCollection(years).orElseGet(() -> CopyrightYears.singleton(getCurrentYear()));
     }
 
     public void renderFile(Writer writer, String templateName, Map<String, Object> context, Locale locale) {
