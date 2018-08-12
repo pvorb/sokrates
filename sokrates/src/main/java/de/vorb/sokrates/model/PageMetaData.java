@@ -31,25 +31,37 @@ public class PageMetaData {
 
     private Map<String, Object> properties;
 
+    public LocalDate getLastModifiedAt() {
+        return lastModifiedAt != null ? lastModifiedAt : createdAt;
+    }
+
+    public Set<String> getTags() {
+        return Collections.unmodifiableSet(tags);
+    }
+
+    public Map<String, Object> getProperties() {
+        return Collections.unmodifiableMap(properties);
+    }
+
     public Map<String, Object> toMap() {
         final Map<String, Object> map = new HashMap<>();
         if (title != null) {
-            map.put("title", title);
+            map.put("title", getTitle());
         }
         if (author != null) {
-            map.put("author", author);
+            map.put("author", getAuthor());
         }
         if (createdAt != null) {
-            map.put("createdAt", createdAt);
+            map.put("createdAt", getCreatedAt());
         }
         if (lastModifiedAt != null) {
-            map.put("lastModifiedAt", lastModifiedAt);
+            map.put("lastModifiedAt", getLastModifiedAt());
         }
         if (tags != null) {
-            map.put("tags", Collections.unmodifiableSet(tags));
+            map.put("tags", getTags());
         }
         if (properties != null) {
-            map.put("properties", Collections.unmodifiableMap(properties));
+            map.put("properties", getProperties());
         }
         return map;
     }
