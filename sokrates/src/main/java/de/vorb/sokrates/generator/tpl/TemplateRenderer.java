@@ -10,29 +10,41 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.io.Writer;
+import java.time.Clock;
+import java.time.LocalDate;
+import java.time.Year;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class TemplateRenderer {
 
+    private final Clock clock;
     private final SokratesProperties sokratesProperties;
     private final List<TemplateEngine> templateEngines;
 
     public void renderPage(Writer writer, Page page, PageMetaData pageMetaData, String content) {
         final String templateName = pageMetaData.getTemplate();
         final Map<String, Object> context = getRenderingContext(page, pageMetaData, content);
-        getEngineForTemplateName(templateName).renderFile(writer, templateName, context);
+        final Locale locale = Optional.ofNullable(pageMetaData.getLocale())
+                .orElse(sokratesProperties.getSite().getDefaultLocale());
+        getEngineForTemplateName(templateName).renderFile(writer, templateName, context, locale);
     }
 
-    public Map<String, Object> getRenderingContext(Page page, PageMetaData pageMetaData, String content) {
+    private Map<String, Object> getRenderingContext(Page page, PageMetaData pageMetaData, String content) {
         final Map<String, Object> context = pageMetaData.toMap();
         context.put("url", page.getUrl());
         context.put("content", content);
         context.put("site", sokratesProperties.getSite());
+        final Integer year = Optional.ofNullable(pageMetaData.getLastModifiedAt()).map(LocalDate::getYear)
+                .orElseGet(() -> Optional.ofNullable(pageMetaData.getCreatedAt()).map(LocalDate::getYear)
+                        .orElse(getCurrentYear()));
+        context.put("year", year);
         return context;
     }
 
@@ -44,10 +56,14 @@ public class TemplateRenderer {
         context.put("pages", pages);
         context.put("groupedPages", groupedIndexPages);
         context.put("site", sokratesProperties.getSite());
-        getEngineForTemplateName(templateName).renderFile(writer, templateName, context);
+        context.put("year", getCurrentYear());
+        final Locale locale = Optional.ofNullable(index.getLocale())
+                .orElse(sokratesProperties.getSite().getDefaultLocale());
+        getEngineForTemplateName(templateName).renderFile(writer, templateName, context, locale);
     }
 
-    public void renderTagFile(Writer writer, String tag, String tagContent, PageMetaData metaData, List<Page> pages) {
+    public void renderTagFile(Writer writer, String tag, String tagContent, PageMetaData metaData,
+            Locale locale, List<Page> pages) {
         final Map<String, Object> context;
         if (metaData != null) {
             context = metaData.toMap();
@@ -65,20 +81,25 @@ public class TemplateRenderer {
 
         context.put("pages", pages);
         context.put("site", sokratesProperties.getSite());
+        context.put("year", getCurrentYear());
 
         final String templateName = sokratesProperties.getGenerator().getTagRule().getTemplate();
 
-        getEngineForTemplateName(templateName).renderFile(writer, templateName, context);
+        getEngineForTemplateName(templateName).renderFile(writer, templateName, context, locale);
     }
 
-    public void renderFile(Writer writer, String templateName, Map<String, Object> context) {
-        getEngineForTemplateName(templateName).renderFile(writer, templateName, context);
+    public void renderFile(Writer writer, String templateName, Map<String, Object> context, Locale locale) {
+        getEngineForTemplateName(templateName).renderFile(writer, templateName, context, locale);
     }
 
     private TemplateEngine getEngineForTemplateName(String templateName) {
         return templateEngines.stream().filter(templateEngine -> templateEngine.matches(templateName)).findFirst()
                 .orElseThrow(
                         () -> new RuntimeException("No template engine found for template '" + templateName + "'"));
+    }
+
+    private int getCurrentYear() {
+        return Year.now(clock).getValue();
     }
 
 }

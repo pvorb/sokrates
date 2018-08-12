@@ -14,11 +14,12 @@ sokrates:
     title: My personal blog
     subtitle: A blog about personal things
     default-locale: en-US
+    translations: src/site/resources/translations
   directory:
-    output: out/
+    output: target/sokrates/
     templates: src/site/templates/
   generator:
-    pandoc-executable: E:\Program Files\Pandoc\pandoc.exe
+    pandoc-executable: /usr/bin/pandoc
     extension-mapping:
       md: html
     generate-rules:

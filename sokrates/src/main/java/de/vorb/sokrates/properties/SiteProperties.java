@@ -13,6 +13,8 @@ public class SiteProperties {
     private String title;
     private String subtitle;
 
+    private String translations = "src/site/resources/translations";
+
     private Properties properties = new Properties();
 
 }

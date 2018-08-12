@@ -71,7 +71,9 @@ public class TagWriter {
             ensureOutputDirectoryExists(outputFilePath.getParent());
 
             try (final Writer writer = openWriter(outputFilePath)) {
-                templateRenderer.renderTagFile(writer, tag, tagContent, metaData, pages);
+                final Locale locale = Optional.ofNullable(tagRule.getLocale())
+                        .orElse(sokratesProperties.getSite().getDefaultLocale());
+                templateRenderer.renderTagFile(writer, tag, tagContent, metaData, locale, pages);
                 log.info("Rendered tag \"{}\" to {}", tag, outputFilePath);
                 numberOfWrittenTagFiles++;
             } catch (IOException e) {
@@ -88,7 +90,10 @@ public class TagWriter {
         final TagRule tagRule = sokratesProperties.getGenerator().getTagRule();
         final Path tagIndexFilePath = determineOutputFilePath("index");
         try (final Writer writer = openWriter(tagIndexFilePath)) {
-            templateRenderer.renderFile(writer, tagRule.getIndexTemplate(), Collections.singletonMap("tags", tags));
+            final Locale locale = Optional.ofNullable(tagRule.getLocale())
+                    .orElse(sokratesProperties.getSite().getDefaultLocale());
+            templateRenderer.renderFile(writer, tagRule.getIndexTemplate(), Collections.singletonMap("tags", tags),
+                    locale);
             log.info("Rendered tag index to {}", tagIndexFilePath);
         } catch (IOException e) {
             log.error("Could not write file {}", tagIndexFilePath);

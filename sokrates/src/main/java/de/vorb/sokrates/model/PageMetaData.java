@@ -21,6 +21,7 @@ public class PageMetaData {
 
     private Path alias;
 
+    private String author;
     private LocalDate createdAt;
     private LocalDate lastModifiedAt;
 
@@ -35,15 +36,14 @@ public class PageMetaData {
         if (title != null) {
             map.put("title", title);
         }
+        if (author != null) {
+            map.put("author", author);
+        }
         if (createdAt != null) {
             map.put("createdAt", createdAt);
         }
         if (lastModifiedAt != null) {
             map.put("lastModifiedAt", lastModifiedAt);
-        }
-        if (locale != null) {
-            map.put("locale", locale.toLanguageTag());
-            map.put("language", locale.getLanguage());
         }
         if (tags != null) {
             map.put("tags", Collections.unmodifiableSet(tags));

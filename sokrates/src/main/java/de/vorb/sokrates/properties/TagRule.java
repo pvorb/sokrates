@@ -5,6 +5,7 @@ import de.vorb.sokrates.generator.pandoc.PandocSourceFileFormat;
 import lombok.Data;
 
 import java.nio.file.Path;
+import java.util.Locale;
 
 @Data
 public class TagRule {
@@ -15,5 +16,6 @@ public class TagRule {
     private String template;
     private Path indexOutputFile;
     private String indexTemplate;
+    private Locale locale;
 
 }

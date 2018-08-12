@@ -11,6 +11,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.io.Writer;
+import java.util.Locale;
 import java.util.Map;
 
 @Slf4j
@@ -28,8 +29,9 @@ public class FreemarkerTemplateEngine implements TemplateEngine {
 
     @Override
     @SneakyThrows
-    public void renderFile(Writer writer, String templateName, Map<String, Object> context) {
+    public void renderFile(Writer writer, String templateName, Map<String, Object> context, Locale locale) {
         final Template template = freemarkerConfiguration.getTemplate(templateName);
+        template.setLocale(locale);
         template.process(context, writer);
     }
 

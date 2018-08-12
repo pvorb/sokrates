@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Locale;
 import java.util.Map;
 
 @Slf4j
@@ -28,7 +29,7 @@ class PebbleTemplateEngine implements TemplateEngine {
     }
 
     @Override
-    public void renderFile(Writer writer, String templateName, Map<String, Object> context) {
+    public void renderFile(Writer writer, String templateName, Map<String, Object> context, Locale locale) {
         try {
             final PebbleTemplate pebbleTemplate = pebbleEngine.getTemplate(templateName);
             pebbleTemplate.evaluate(writer, context);
