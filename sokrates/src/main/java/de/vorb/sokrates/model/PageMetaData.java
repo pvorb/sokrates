@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -27,42 +28,38 @@ public class PageMetaData {
 
     private String template;
     private Locale locale;
-    private Set<String> tags;
+    private Set<String> tags = new HashSet<>();
 
-    private Map<String, Object> properties;
+    private Map<String, Object> properties = new HashMap<>();
 
     public LocalDate getLastModifiedAt() {
         return lastModifiedAt != null ? lastModifiedAt : createdAt;
     }
 
     public Set<String> getTags() {
-        return Collections.unmodifiableSet(tags);
+        if (tags == null) {
+            return Collections.emptySet();
+        } else {
+            return Collections.unmodifiableSet(tags);
+        }
     }
 
     public Map<String, Object> getProperties() {
-        return Collections.unmodifiableMap(properties);
+        if (properties == null) {
+            return Collections.emptyMap();
+        } else {
+            return Collections.unmodifiableMap(properties);
+        }
     }
 
     public Map<String, Object> toMap() {
         final Map<String, Object> map = new HashMap<>();
-        if (title != null) {
-            map.put("title", getTitle());
-        }
-        if (author != null) {
-            map.put("author", getAuthor());
-        }
-        if (createdAt != null) {
-            map.put("createdAt", getCreatedAt());
-        }
-        if (lastModifiedAt != null) {
-            map.put("lastModifiedAt", getLastModifiedAt());
-        }
-        if (tags != null) {
-            map.put("tags", getTags());
-        }
-        if (properties != null) {
-            map.put("properties", getProperties());
-        }
+        map.put("title", getTitle());
+        map.put("author", getAuthor());
+        map.put("createdAt", getCreatedAt());
+        map.put("lastModifiedAt", getLastModifiedAt());
+        map.put("tags", getTags());
+        map.put("properties", getProperties());
         return map;
     }
 

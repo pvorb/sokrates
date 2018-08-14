@@ -4,6 +4,7 @@ import de.vorb.sokrates.db.jooq.tables.pojos.Page;
 import de.vorb.sokrates.db.repositories.PageTagRepository;
 import de.vorb.sokrates.generator.pandoc.PandocRunner;
 import de.vorb.sokrates.generator.tpl.TemplateRenderer;
+import de.vorb.sokrates.model.CopyrightYears;
 import de.vorb.sokrates.model.PageMetaData;
 import de.vorb.sokrates.properties.SokratesProperties;
 import de.vorb.sokrates.properties.TagRule;
@@ -20,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -92,8 +94,11 @@ public class TagWriter {
         try (final Writer writer = openWriter(tagIndexFilePath)) {
             final Locale locale = Optional.ofNullable(tagRule.getLocale())
                     .orElse(sokratesProperties.getSite().getDefaultLocale());
-            templateRenderer.renderFile(writer, tagRule.getIndexTemplate(), Collections.singletonMap("tags", tags),
-                    locale);
+            final Map<String, Object> context = new HashMap<>();
+            context.put("tags", tags);
+            context.put("site", sokratesProperties.getSite());
+            context.put("copyrightYears", CopyrightYears.singleton(templateRenderer.getCurrentYear()));
+            templateRenderer.renderFile(writer, tagRule.getIndexTemplate(), context, locale);
             log.info("Rendered tag index to {}", tagIndexFilePath);
         } catch (IOException e) {
             log.error("Could not write file {}", tagIndexFilePath);

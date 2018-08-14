@@ -72,17 +72,14 @@ public class TemplateRenderer {
         if (metaData != null) {
             context = metaData.toMap();
         } else {
-            context = new HashMap<>();
+            context = PageMetaData.builder().title(tag).build().toMap();
         }
 
         if (tagContent != null) {
             context.put("content", tagContent);
         }
 
-        if (!context.containsKey("title")) {
-            context.put("title", tag);
-        }
-
+        context.put("tag", tag);
         context.put("pages", pages);
         context.put("site", sokratesProperties.getSite());
         context.put("copyrightYears", getCopyrightYearsFromPages(pages));
@@ -109,7 +106,7 @@ public class TemplateRenderer {
                         () -> new RuntimeException("No template engine found for template '" + templateName + "'"));
     }
 
-    private int getCurrentYear() {
+    public int getCurrentYear() {
         return Year.now(clock).getValue();
     }
 
