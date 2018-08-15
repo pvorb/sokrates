@@ -58,6 +58,19 @@
                 <groupId>com.amashchenko.maven.plugin</groupId>
                 <artifactId>gitflow-maven-plugin</artifactId>
                 <version>${gitflow-maven-plugin.version}</version>
+                <configuration>
+                    <gpgSignCommit>true</gpgSignCommit>
+                    <gpgSignTag>true</gpgSignTag>
+
+                    <fetchRemote>false</fetchRemote>
+                    <pushRemote>false</pushRemote>
+
+                    <hotfixStartMessage>Update versions for hotfix release</hotfixStartMessage>
+                    <hotfixFinishMessage>Update versions for next development phase</hotfixFinishMessage>
+
+                    <releaseStartMessage>Update versions for release</releaseStartMessage>
+                    <releaseFinishMessage>Update versions for next development phase</releaseFinishMessage>
+                </configuration>
             </plugin>
         </plugins>
     </build>
