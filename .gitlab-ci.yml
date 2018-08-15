@@ -1,0 +1,31 @@
+image: maven:3.5-jdk-8
+
+before_script:
+  - wget -q https://github.com/jgm/pandoc/releases/download/2.2.3.2/pandoc-2.2.3.2-linux.tar.gz -O pandoc.tgz
+  - tar xzf pandoc.tgz --strip-components 1 -C /usr/
+
+build:
+  script:
+    - mvn -B install
+  except:
+    - tags@pvorb/sokrates
+  tags:
+    - docker
+
+deploy:
+  stage: deploy
+  script:
+    - echo "<settings>
+        <servers>
+          <server>
+            <id>bintray-pvorb-sokrates</id>
+            <username>$bintray_username</username>
+            <password>$bintray_api_key</password>
+          </server>
+        </servers>
+      </settings>" > /root/.m2/settings.xml
+    - mvn -B deploy
+  only:
+    - tags@pvorb/sokrates
+  tags:
+    - docker

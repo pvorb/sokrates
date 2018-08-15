@@ -3,13 +3,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>de.vorb</groupId>
+    <groupId>de.vorb.sokrates</groupId>
     <artifactId>sokrates-parent</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <url>https://github.com/pvorb/sokrates</url>
     <description>A static website/blog generator</description>
+    <inceptionYear>2017</inceptionYear>
 
     <modules>
         <module>sokrates</module>
@@ -49,11 +50,24 @@
             <id>pvorb</id>
             <name>Paul Vorbach</name>
             <email>paul@vorba.ch</email>
+            <url>https://paul.vorba.ch</url>
         </developer>
     </developers>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>com.amashchenko.maven.plugin</groupId>
                 <artifactId>gitflow-maven-plugin</artifactId>
@@ -74,5 +88,12 @@
             </plugin>
         </plugins>
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>bintray-pvorb-sokrates</id>
+            <url>https://api.bintray.com/maven/pvorb/sokrates/sokrates/;publish=1</url>
+        </repository>
+    </distributionManagement>
 
 </project>
