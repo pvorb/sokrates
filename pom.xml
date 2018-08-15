@@ -26,6 +26,8 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <gitflow-maven-plugin.version>1.10.0</gitflow-maven-plugin.version>
     </properties>
 
     <scm>
@@ -49,5 +51,15 @@
             <email>paul@vorba.ch</email>
         </developer>
     </developers>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.amashchenko.maven.plugin</groupId>
+                <artifactId>gitflow-maven-plugin</artifactId>
+                <version>${gitflow-maven-plugin.version}</version>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
