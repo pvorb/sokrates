@@ -36,7 +36,11 @@ public class TemplateRenderer {
         final Map<String, Object> context = getRenderingContext(page, pageMetaData, content);
         final Locale locale = Optional.ofNullable(pageMetaData.getLocale())
                 .orElse(sokratesProperties.getSite().getDefaultLocale());
-        getEngineForTemplateName(templateName).renderFile(writer, templateName, context, locale);
+        try {
+            getEngineForTemplateName(templateName).renderFile(writer, templateName, context, locale);
+        } catch (Exception e) {
+            log.error("Rendering page '{}' failed", page.getUrl(), e);
+        }
     }
 
     private Map<String, Object> getRenderingContext(Page page, PageMetaData pageMetaData, String content) {
@@ -53,17 +57,22 @@ public class TemplateRenderer {
     }
 
     public void renderIndexFile(Writer writer, IndexProperties index, List<Page> pages,
-            Map<Object, List<Page>> groupedIndexPages) {
+            Map<Object, List<Page>> groupedIndexPages, Map<Long, List<String>> pageTags) {
         final String templateName = index.getTemplate();
         final Map<String, Object> context = new HashMap<>();
         context.put("index", index);
         context.put("pages", pages);
         context.put("groupedPages", groupedIndexPages);
+        context.put("pageTags", pageTags);
         context.put("site", sokratesProperties.getSite());
         context.put("copyrightYears", getCopyrightYearsFromPages(pages));
         final Locale locale = Optional.ofNullable(index.getLocale())
                 .orElse(sokratesProperties.getSite().getDefaultLocale());
-        getEngineForTemplateName(templateName).renderFile(writer, templateName, context, locale);
+        try {
+            getEngineForTemplateName(templateName).renderFile(writer, templateName, context, locale);
+        } catch (Exception e) {
+            log.error("Rendering index '{}' failed", index.getName(), e);
+        }
     }
 
     public void renderTagFile(Writer writer, String tag, String tagContent, PageMetaData metaData,
@@ -86,7 +95,11 @@ public class TemplateRenderer {
 
         final String templateName = sokratesProperties.getGenerator().getTagRule().getTemplate();
 
-        getEngineForTemplateName(templateName).renderFile(writer, templateName, context, locale);
+        try {
+            getEngineForTemplateName(templateName).renderFile(writer, templateName, context, locale);
+        } catch (Exception e) {
+            log.error("Rendering tag '{}' failed", tag, e);
+        }
     }
 
     private CopyrightYears getCopyrightYearsFromPages(List<Page> pages) {
@@ -96,7 +109,8 @@ public class TemplateRenderer {
         return CopyrightYears.fromCollection(years).orElseGet(() -> CopyrightYears.singleton(getCurrentYear()));
     }
 
-    public void renderFile(Writer writer, String templateName, Map<String, Object> context, Locale locale) {
+    public void renderFile(Writer writer, String templateName, Map<String, Object> context, Locale locale)
+            throws Exception {
         getEngineForTemplateName(templateName).renderFile(writer, templateName, context, locale);
     }
 

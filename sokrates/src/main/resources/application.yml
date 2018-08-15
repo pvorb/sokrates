@@ -16,6 +16,7 @@ sokrates:
   site:
     title: My personal blog
     subtitle: A blog about personal things
+    author: John Doe
     default-locale: en-US
     translations: src/site/resources/translations
   directory:

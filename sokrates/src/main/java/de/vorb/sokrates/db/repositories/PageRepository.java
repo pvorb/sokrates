@@ -46,7 +46,11 @@ public class PageRepository {
     }
 
     public void insert(Page page) {
-        dslContext.executeInsert(dslContext.newRecord(PAGE, page));
+        final PageRecord storedRecord = dslContext.insertInto(PAGE)
+                .set(dslContext.newRecord(PAGE, page))
+                .returning(PAGE.ID)
+                .fetchOne();
+        page.setId(storedRecord.getId());
     }
 
     public void update(Page page) {

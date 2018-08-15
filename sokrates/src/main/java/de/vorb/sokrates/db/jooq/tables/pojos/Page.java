@@ -26,7 +26,7 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Page implements Serializable {
 
-    private static final long serialVersionUID = -2037046826;
+    private static final long serialVersionUID = -1856231701;
 
     private Long      id;
     private Path      sourceFilePath;
@@ -37,6 +37,9 @@ public class Page implements Serializable {
     private LocalDate lastModifiedAt;
     private Locale    locale;
     private byte[]    checksum;
+    private String    author;
+    private String    contentHtml;
+    private String    teaserImageUrl;
 
     public Page() {}
 
@@ -50,6 +53,9 @@ public class Page implements Serializable {
         this.lastModifiedAt = value.lastModifiedAt;
         this.locale = value.locale;
         this.checksum = value.checksum;
+        this.author = value.author;
+        this.contentHtml = value.contentHtml;
+        this.teaserImageUrl = value.teaserImageUrl;
     }
 
     public Page(
@@ -61,7 +67,10 @@ public class Page implements Serializable {
         LocalDate createdAt,
         LocalDate lastModifiedAt,
         Locale    locale,
-        byte[]    checksum
+        byte[]    checksum,
+        String    author,
+        String    contentHtml,
+        String    teaserImageUrl
     ) {
         this.id = id;
         this.sourceFilePath = sourceFilePath;
@@ -72,6 +81,9 @@ public class Page implements Serializable {
         this.lastModifiedAt = lastModifiedAt;
         this.locale = locale;
         this.checksum = checksum;
+        this.author = author;
+        this.contentHtml = contentHtml;
+        this.teaserImageUrl = teaserImageUrl;
     }
 
     public Long getId() {
@@ -155,6 +167,33 @@ public class Page implements Serializable {
         return this;
     }
 
+    public String getAuthor() {
+        return this.author;
+    }
+
+    public Page setAuthor(String author) {
+        this.author = author;
+        return this;
+    }
+
+    public String getContentHtml() {
+        return this.contentHtml;
+    }
+
+    public Page setContentHtml(String contentHtml) {
+        this.contentHtml = contentHtml;
+        return this;
+    }
+
+    public String getTeaserImageUrl() {
+        return this.teaserImageUrl;
+    }
+
+    public Page setTeaserImageUrl(String teaserImageUrl) {
+        this.teaserImageUrl = teaserImageUrl;
+        return this;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Page (");
@@ -168,6 +207,9 @@ public class Page implements Serializable {
         sb.append(", ").append(lastModifiedAt);
         sb.append(", ").append(locale);
         sb.append(", ").append("[binary...]");
+        sb.append(", ").append(author);
+        sb.append(", ").append(contentHtml);
+        sb.append(", ").append(teaserImageUrl);
 
         sb.append(")");
         return sb.toString();

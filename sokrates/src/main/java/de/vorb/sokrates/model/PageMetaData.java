@@ -1,8 +1,10 @@
 package de.vorb.sokrates.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.nio.file.Path;
 import java.time.LocalDate;
@@ -15,6 +17,8 @@ import java.util.Set;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PageMetaData {
 
@@ -26,9 +30,11 @@ public class PageMetaData {
     private LocalDate createdAt;
     private LocalDate lastModifiedAt;
 
-    private String template;
-    private Locale locale;
     private Set<String> tags = new HashSet<>();
+    private Locale locale;
+
+    private String template;
+    private Teaser teaser;
 
     private Map<String, Object> properties = new HashMap<>();
 
@@ -59,6 +65,7 @@ public class PageMetaData {
         map.put("createdAt", getCreatedAt());
         map.put("lastModifiedAt", getLastModifiedAt());
         map.put("tags", getTags());
+        map.put("teaser", getTeaser());
         map.put("properties", getProperties());
         return map;
     }

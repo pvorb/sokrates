@@ -46,7 +46,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Page extends TableImpl<PageRecord> {
 
-    private static final long serialVersionUID = 1197174070;
+    private static final long serialVersionUID = 236627028;
 
     /**
      * The reference instance of <code>PUBLIC.PAGE</code>
@@ -107,6 +107,21 @@ public class Page extends TableImpl<PageRecord> {
     public final TableField<PageRecord, byte[]> CHECKSUM = createField("CHECKSUM", org.jooq.impl.SQLDataType.VARBINARY.nullable(false), this, "");
 
     /**
+     * The column <code>PUBLIC.PAGE.AUTHOR</code>.
+     */
+    public final TableField<PageRecord, String> AUTHOR = createField("AUTHOR", org.jooq.impl.SQLDataType.VARCHAR(2147483647).nullable(false), this, "");
+
+    /**
+     * The column <code>PUBLIC.PAGE.CONTENT_HTML</code>.
+     */
+    public final TableField<PageRecord, String> CONTENT_HTML = createField("CONTENT_HTML", org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
+
+    /**
+     * The column <code>PUBLIC.PAGE.TEASER_IMAGE_URL</code>.
+     */
+    public final TableField<PageRecord, String> TEASER_IMAGE_URL = createField("TEASER_IMAGE_URL", org.jooq.impl.SQLDataType.VARCHAR(2147483647), this, "");
+
+    /**
      * Create a <code>PUBLIC.PAGE</code> table reference
      */
     public Page() {
@@ -148,7 +163,7 @@ public class Page extends TableImpl<PageRecord> {
      */
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.CONSTRAINT_INDEX_2, Indexes.CONSTRAINT_INDEX_25, Indexes.IDX__PAGE__CREATED_AT, Indexes.IDX__PAGE__LAST_MODIFIED_AT, Indexes.PRIMARY_KEY_2);
+        return Arrays.<Index>asList(Indexes.CONSTRAINT_255_INDEX_B, Indexes.CONSTRAINT_25_INDEX_B, Indexes.IDX__PAGE__CREATED_AT, Indexes.IDX__PAGE__LAST_MODIFIED_AT, Indexes.PRIMARY_KEY_B);
     }
 
     /**

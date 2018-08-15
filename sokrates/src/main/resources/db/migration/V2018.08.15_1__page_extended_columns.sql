@@ -1,0 +1,16 @@
+ALTER TABLE page
+  ADD COLUMN author VARCHAR;
+ALTER TABLE page
+  ADD COLUMN content_html TEXT;
+ALTER TABLE page
+  ADD COLUMN teaser_image_url VARCHAR;
+
+DELETE
+FROM page_tag;
+DELETE
+FROM page;
+
+ALTER TABLE page
+  ALTER COLUMN author VARCHAR NOT NULL;
+ALTER TABLE page
+  ALTER COLUMN content_html TEXT NOT NULL;

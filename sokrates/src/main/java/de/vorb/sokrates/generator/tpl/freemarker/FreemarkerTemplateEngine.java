@@ -5,7 +5,6 @@ import de.vorb.sokrates.generator.tpl.TemplateEngine;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -28,8 +27,8 @@ public class FreemarkerTemplateEngine implements TemplateEngine {
     }
 
     @Override
-    @SneakyThrows
-    public void renderFile(Writer writer, String templateName, Map<String, Object> context, Locale locale) {
+    public void renderFile(Writer writer, String templateName, Map<String, Object> context, Locale locale)
+            throws Exception {
         final Template template = freemarkerConfiguration.getTemplate(templateName);
         template.setLocale(locale);
         template.process(context, writer);

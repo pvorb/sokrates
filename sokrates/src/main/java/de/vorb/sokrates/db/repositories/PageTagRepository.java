@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static de.vorb.sokrates.db.jooq.Tables.PAGE;
 import static de.vorb.sokrates.db.jooq.Tables.PAGE_TAG;
@@ -58,4 +59,10 @@ public class PageTagRepository {
                 .execute();
     }
 
+    public Map<Long, List<String>> findTagsForPageIds(Set<Long> pageIds) {
+        return dslContext.select(PAGE_TAG.PAGE_ID, TAG.NAME)
+                .from(PAGE_TAG).join(TAG).on(TAG.ID.eq(PAGE_TAG.TAG_ID))
+                .where(PAGE_TAG.PAGE_ID.in(pageIds))
+                .fetchGroups(PAGE_TAG.PAGE_ID, TAG.NAME);
+    }
 }

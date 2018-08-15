@@ -20,7 +20,6 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -102,6 +101,8 @@ public class TagWriter {
             log.info("Rendered tag index to {}", tagIndexFilePath);
         } catch (IOException e) {
             log.error("Could not write file {}", tagIndexFilePath);
+        } catch (Exception e) {
+            log.error("Rendering tag index '{}' failed", tagRule.getIndexOutputFile(), e);
         }
     }
 

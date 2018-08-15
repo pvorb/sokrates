@@ -144,9 +144,8 @@ public class PageWriter {
         }
     }
 
-    private Page createPage(SourceFileMatch sourceFileMatch, PageMetaData pageMetaData, URI url,
-            byte[] checksum) {
-        return new Page()
+    private Page createPage(SourceFileMatch sourceFileMatch, PageMetaData pageMetaData, URI url, byte[] checksum) {
+        final Page page = new Page()
                 .setSourceFilePath(sourceFileMatch.getFilePath())
                 .setSourceFileFormat(sourceFileMatch.getFormat().getFormat())
                 .setUrl(url)
@@ -155,6 +154,18 @@ public class PageWriter {
                 .setLastModifiedAt(pageMetaData.getLastModifiedAt())
                 .setLocale(pageMetaData.getLocale())
                 .setChecksum(checksum);
+
+        if (pageMetaData.getAuthor() != null) {
+            page.setAuthor(pageMetaData.getAuthor());
+        } else {
+            page.setAuthor(sokratesProperties.getSite().getAuthor());
+        }
+
+        if (pageMetaData.getTeaser() != null) {
+            page.setTeaserImageUrl(pageMetaData.getTeaser().getImageUrl());
+        }
+
+        return page;
     }
 
     private void renderPage(Page page, PageMetaData pageMetaData, Path outputFilePath) {
@@ -163,6 +174,8 @@ public class PageWriter {
         final String htmlContent =
                 pandocRunner.convertFile(page.getSourceFilePath(), locale,
                         PandocSourceFileFormat.forString(page.getSourceFileFormat()), HTML5);
+
+        page.setContentHtml(htmlContent);
 
         try (final Writer writer = openWriter(outputFilePath)) {
             templateRenderer.renderPage(writer, page, pageMetaData, htmlContent);
@@ -192,10 +205,7 @@ public class PageWriter {
     }
 
     private void linkPageToTags(Page page, Set<String> tags) {
-
-        final Long pageId = pageRepository.fetchOneBySourceFilePath(page.getSourceFilePath()).getId();
-
-        pageTagRepository.savePageTags(pageId, tags);
+        pageTagRepository.savePageTags(page.getId(), tags);
     }
 
 }

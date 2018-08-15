@@ -8,6 +8,6 @@ public interface TemplateEngine {
 
     boolean matches(String templateName);
 
-    void renderFile(Writer writer, String templateName, Map<String, Object> context, Locale locale);
+    void renderFile(Writer writer, String templateName, Map<String, Object> context, Locale locale) throws Exception;
 
 }

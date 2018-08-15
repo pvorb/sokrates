@@ -2,6 +2,7 @@ package de.vorb.sokrates.generator;
 
 import de.vorb.sokrates.db.jooq.tables.pojos.Page;
 import de.vorb.sokrates.db.repositories.PageRepository;
+import de.vorb.sokrates.db.repositories.PageTagRepository;
 import de.vorb.sokrates.generator.tpl.TemplateRenderer;
 import de.vorb.sokrates.properties.IndexProperties;
 import de.vorb.sokrates.properties.SokratesProperties;
@@ -20,6 +21,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static de.vorb.sokrates.db.jooq.Tables.PAGE;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -33,6 +36,7 @@ public class IndexWriter {
 
     private final SokratesProperties sokratesProperties;
     private final PageRepository pageRepository;
+    private final PageTagRepository pageTagRepository;
     private final TemplateRenderer templateRenderer;
 
     @Transactional
@@ -45,14 +49,16 @@ public class IndexWriter {
             final List<SortField<?>> sortFields = determineOrder(index);
 
             final List<Page> indexPages = pageRepository.fetchWithOrderBy(sortFields, index.getLimit());
+            final Set<Long> pageIds = indexPages.stream().map(Page::getId).collect(Collectors.toSet());
             final Map<Object, List<Page>> groupedIndexPages = index.getGrouping().groupPages(indexPages.stream());
+            final Map<Long, List<String>> pageTags = pageTagRepository.findTagsForPageIds(pageIds);
 
-            writeIndexFile(index, indexPages, groupedIndexPages);
+            writeIndexFile(index, indexPages, groupedIndexPages, pageTags);
         }
     }
 
     private void writeIndexFile(IndexProperties index, List<Page> indexPages,
-            Map<Object, List<Page>> groupedIndexPages) {
+            Map<Object, List<Page>> groupedIndexPages, Map<Long, List<String>> pageTags) {
 
         final Path outputFilePath = sokratesProperties.getDirectory().getOutput()
                 .resolve(index.getOutputFile());
@@ -60,7 +66,7 @@ public class IndexWriter {
         ensureOutputDirectoryExists(outputFilePath.getParent());
 
         try (final BufferedWriter writer = openBufferedWriter(outputFilePath)) {
-            templateRenderer.renderIndexFile(writer, index, indexPages, groupedIndexPages);
+            templateRenderer.renderIndexFile(writer, index, indexPages, groupedIndexPages, pageTags);
             log.info("Rendered index \"{}\" to {}", index.getName(), outputFilePath);
         } catch (IOException e) {
             log.error("Could not write index file", e);
