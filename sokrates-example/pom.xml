@@ -1,0 +1,80 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>de.vorb.sokrates</groupId>
+        <artifactId>sokrates-parent</artifactId>
+        <version>0.1.0</version>
+    </parent>
+
+    <artifactId>sokrates-example</artifactId>
+    <packaging>pom</packaging>
+
+    <description>Example website using Maven and Sokrates</description>
+
+    <properties>
+        <maven.deploy.skip>true</maven.deploy.skip>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>de.vorb.sokrates</groupId>
+            <artifactId>sokrates</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <executions>
+                    <execution>
+                        <id>generate-site</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>java</executable>
+                            <arguments>
+                                <!-- uncomment for debugging -->
+                                <!--
+                                <argument>-Xdebug</argument>
+                                <argument>-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005</argument>
+                                -->
+                                <argument>-classpath</argument>
+                                <classpath/>
+                                <argument>de.vorb.sokrates.app.SokratesApp</argument>
+                                <argument>generate</argument>
+                                <argument>--force</argument>
+                            </arguments>
+                            <workingDirectory>${project.basedir}</workingDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>preview-site</id>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>de.vorb.sokrates.SokratesApp</mainClass>
+                            <arguments>
+                                <argument>preview</argument>
+                            </arguments>
+                            <daemonThreadJoinTimeout>-1</daemonThreadJoinTimeout>
+                        </configuration>
+                    </execution>
+                </executions>
+
+                <configuration>
+                    <includeProjectDependencies>true</includeProjectDependencies>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

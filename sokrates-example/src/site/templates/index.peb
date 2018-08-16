@@ -1,0 +1,16 @@
+{% extends 'base.peb' %}
+
+{% block title %}
+    {{ index.title | noHtml }} | {{ site.title | noHtml }}
+{% endblock %}
+
+{% block content %}
+    {% for entry in groupedPages %}
+        <h2>{{ entry.key }}</h2>
+        <ul>
+        {% for page in entry.value %}
+            <li><a href="{{ page.url }}">{{ page.createdAt }} &ndash; {{ page.title | raw }}</a></li>
+        {% endfor %}
+        </ul>
+    {% endfor %}
+{% endblock %}
