@@ -58,6 +58,7 @@ public class PandocRunner {
                 "--variable=lang:" + locale.toLanguageTag(),
                 "--from=" + sourceFormat.getFormat(),
                 "--to=" + targetFormat.getFormat(),
+                "--smart",
                 inputFile.toString()
         ).start();
 
