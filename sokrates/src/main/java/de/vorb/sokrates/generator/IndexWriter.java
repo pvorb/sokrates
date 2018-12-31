@@ -48,7 +48,8 @@ public class IndexWriter {
 
             final List<SortField<?>> sortFields = determineOrder(index);
 
-            final List<Page> indexPages = pageRepository.fetchWithOrderBy(sortFields, index.getLimit());
+            final List<Page> indexPages = pageRepository.fetchWithWhereAndOrderBy(index.getWhere(), sortFields,
+                    index.getLimit());
             final Set<Long> pageIds = indexPages.stream().map(Page::getId).collect(Collectors.toSet());
             final Map<Object, List<Page>> groupedIndexPages = index.getGrouping().groupPages(indexPages.stream());
             final Map<Long, List<String>> pageTags = pageTagRepository.findTagsForPageIds(pageIds);

@@ -9,8 +9,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.nio.file.Path;
 import java.util.Locale;
 
@@ -30,16 +28,9 @@ public class PandocRunner {
             PandocTargetFileFormat targetFormat) {
 
         final Path inputFile = file.toAbsolutePath();
-        final StringWriter output = new StringWriter();
 
         try {
-            final int exitCode = runPandoc(inputFile, locale, sourceFormat, targetFormat, output);
-
-            if (exitCode == 0) {
-                return output.toString();
-            } else {
-                throw new PandocExecutionException("Pandoc exited with code " + exitCode);
-            }
+            return runPandoc(inputFile, locale, sourceFormat, targetFormat);
         } catch (InterruptedException e) {
             throw new PandocExecutionException("Pandoc was interrupted", e);
         } catch (IOException e) {
@@ -47,9 +38,9 @@ public class PandocRunner {
         }
     }
 
-    private int runPandoc(Path inputFile, Locale locale,
-            PandocSourceFileFormat sourceFormat, PandocTargetFileFormat targetFormat,
-            Writer output) throws IOException, InterruptedException {
+    private String runPandoc(Path inputFile, Locale locale,
+            PandocSourceFileFormat sourceFormat, PandocTargetFileFormat targetFormat)
+            throws IOException, InterruptedException {
 
         final String pandocExecutable = sokratesProperties.getGenerator().getPandocExecutable()
                 .toAbsolutePath().toString();
@@ -58,13 +49,17 @@ public class PandocRunner {
                 "--variable=lang:" + locale.toLanguageTag(),
                 "--from=" + sourceFormat.getFormat(),
                 "--to=" + targetFormat.getFormat(),
-                "--smart",
                 inputFile.toString()
         ).start();
 
-        CharStreams.copy(new InputStreamReader(pandocProcess.getInputStream(), UTF_8), output);
-
-        return pandocProcess.waitFor();
+        final int exitCode = pandocProcess.waitFor();
+        if (exitCode == 0) {
+            return CharStreams.toString(new InputStreamReader(pandocProcess.getInputStream(), UTF_8));
+        } else {
+            throw new PandocExecutionException(
+                    "Pandoc exited with code " + exitCode + " while processing file " + inputFile + "; Error:\n" +
+                            CharStreams.toString(new InputStreamReader(pandocProcess.getErrorStream(), UTF_8)));
+        }
     }
 
 }
