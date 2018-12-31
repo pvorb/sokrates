@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.2.0
+
+* Implement filtering of indexes
+
 
 ## Version 0.1.1
 
