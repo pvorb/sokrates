@@ -5,7 +5,7 @@
 
     <groupId>de.vorb.sokrates</groupId>
     <artifactId>sokrates-parent</artifactId>
-    <version>0.2.0</version>
+    <version>0.2.1</version>
     <packaging>pom</packaging>
 
     <url>https://github.com/pvorb/sokrates</url>
@@ -55,6 +55,18 @@
     </developers>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>3.0.0-M3</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>3.0.0-M3</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
