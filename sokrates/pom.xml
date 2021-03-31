@@ -19,7 +19,7 @@
         <flyway.version>5.0.3</flyway.version>
         <lombok.version>1.16.16</lombok.version>
         <h2.version>1.4.196</h2.version>
-        <guava.version>27.0.1-jre</guava.version>
+        <guava.version>29.0-jre</guava.version>
         <jackson.version>2.11.3</jackson.version>
         <pebble.version>2.4.0</pebble.version>
         <picocli.version>2.2.1</picocli.version>
