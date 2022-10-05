@@ -20,7 +20,7 @@
         <lombok.version>1.16.16</lombok.version>
         <h2.version>1.4.196</h2.version>
         <guava.version>29.0-jre</guava.version>
-        <jackson.version>2.11.3</jackson.version>
+        <jackson.version>2.12.6.1</jackson.version>
         <pebble.version>2.4.0</pebble.version>
         <picocli.version>2.2.1</picocli.version>
         <assertj.version>3.9.0</assertj.version>
